@@ -1,0 +1,37 @@
+<%= form_for(decision) do |f| %>
+  <% if decision.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(decision.errors.count, "error") %> prohibited this decision from being saved:</h2>
+
+      <ul>
+      <% decision.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description %>
+    <%= f.text_field :description %>
+  </div>
+
+  <div class="field">
+    <%= f.label :owner %>
+    <%= f.text_field :owner %>
+  </div>
+
+  <div class="field">
+    <%= f.label :visibility %>
+    <%= f.text_field :visibility %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @decision.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @decision.description %>
+</p>
+
+<p>
+  <strong>Owner:</strong>
+  <%= @decision.owner %>
+</p>
+
+<p>
+  <strong>Visibility:</strong>
+  <%= @decision.visibility %>
+</p>
+
+<%= link_to 'Edit', edit_decision_path(@decision) %> |
+<%= link_to 'Back', decisions_path %>
