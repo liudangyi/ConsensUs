@@ -8,10 +8,12 @@
 
 daniel = User.create!(name: 'Daniel', email: 'daniel@ucsd.edu', password: '123456')
 
-decision = Decision.create!(name: 'FirstDecision', description: 'Our first decision', owner: daniel)
+decision = Decision.create!(name: 'FirstDecision', description: 'Our first decision', visibility: :private)
+
+UserDecision.create!(user: daniel, decision: decision, role: :owner)
 
 %w[ James Mary Paul Linda Dave ].each do |e|
-  Candidate.new(name: e, decision: decision)
+  Alternative.new(name: e, decision: decision)
 end
 
 ['Academic', 'Recommendation Letter', 'Readiness for Engineering'].each do |e|

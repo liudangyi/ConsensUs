@@ -1,4 +1,4 @@
-class Candidate
+class Alternative
   include Mongoid::Document
   include Mongoid::Timestamps
 

@@ -4,7 +4,6 @@ class User
 
   field :name, type: String
 
-  has_many :decisions, inverse_of: :owner
   has_many :user_decisions
 
   ##############

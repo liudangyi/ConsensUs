@@ -24,7 +24,7 @@ class DecisionsController < ApplicationController
   # POST /decisions
   # POST /decisions.json
   def create
-    @decision = Decision.new(decision_params)
+    @decision = Decision.new(decision_params.merge(owner: current_user))
 
     respond_to do |format|
       if @decision.save
@@ -69,6 +69,6 @@ class DecisionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def decision_params
-      params.require(:decision).permit(:name, :description, :owner, :visibility)
+      params.require(:decision).permit(:name, :description, :visibility)
     end
 end
