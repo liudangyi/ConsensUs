@@ -4,9 +4,13 @@ class Alternative
 
   field :name, type: String
   field :description, type: String, default: ''
-  field :color, type: String
+  field :color, type: String, default: -> { generate_color }
 
   validates_presence_of :name, :color
 
   belongs_to :decision
+
+  def generate_color
+    Color::HSL.new(rand(360), 80, 45).to_rgb.hex
+  end
 end

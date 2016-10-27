@@ -4,13 +4,14 @@
   <div class="col-md-4">
     <h3>Info</h3>
       Description: <%= @decision.description %> <br>
-      URL: <a href="/s/<%= @decision.short_url %>">consensus.ucsd.edu/s/<%= @decision.short_url %></a>
+      URL: <a href="/s/<%= @decision.short_url %>">consensus.ucsd.edu/s/<%= @decision.short_url %></a> <br>
+      <%= link_to 'Edit', edit_decision_path(@decision) %>
     <h3>Commmittee</h3>
     <ul>
-      <% @decision.user_decisions.includes(:user).each do |user_decision| %>
+      <% @decision.memberships.includes(:user).each do |membership| %>
         <li>
-          <%= user_decision.user.name %> &lt;<%= user_decision.user.email %>&gt;
-          <% if user_decision.owner? %>
+          <%= membership.user.name %> &lt;<%= membership.user.email %>&gt;
+          <% if membership.owner? %>
             <span class="label label-primary">Owner</span>
           <% end -%>
         </li>
@@ -22,7 +23,10 @@
     <ul>
       <% @decision.alternatives.each do |alternative| %>
         <li>
-          <h4><%= alternative.name %></h4>
+          <h4>
+            <span style="background-color: #<%= alternative.color %>;">&nbsp;</span>&nbsp;
+            <%= alternative.name %>
+          </h4>
           <%= alternative.description %>
         </li>
       <% end -%>

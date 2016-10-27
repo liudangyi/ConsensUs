@@ -6,7 +6,7 @@ class DecisionsController < ApplicationController
   # GET /decisions
   # GET /decisions.json
   def index
-    @user_decisions = current_user.user_decisions.includes(:decision)
+    @memberships = current_user.memberships.includes(:decision)
   end
 
   # GET /s/:short_url
@@ -39,7 +39,7 @@ class DecisionsController < ApplicationController
 
     respond_to do |format|
       if @decision.save
-        @decision.user_decisions.create(user: current_user, role: :admin)
+        @decision.memberships.create(user: current_user, role: :admin)
         format.html { redirect_to @decision, notice: 'Decision was successfully created.' }
         format.json { render :show, status: :created, location: @decision }
       else
@@ -77,11 +77,11 @@ class DecisionsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_decision
       @decision = Decision.find(params[:id])
-      @user_decision = current_user.user_decisions.find_by!(decision: @decision)
+      @membership = current_user.memberships.find_by!(decision: @decision)
     end
 
     def require_admin
-      raise AccessDenied unless @user_decision.owner?
+      raise AccessDenied unless @membership.owner?
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

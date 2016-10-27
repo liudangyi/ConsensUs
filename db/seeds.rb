@@ -10,7 +10,7 @@ daniel = User.find_or_create_by!(name: 'Daniel', email: 'daniel@ucsd.edu', passw
 
 decision = Decision.find_or_create_by!(name: 'FirstDecision', description: 'Our first decision', visibility: :private)
 
-UserDecision.find_or_create_by!(user: daniel, decision: decision, role: :owner)
+Membership.find_or_create_by!(user: daniel, decision: decision, role: :owner)
 
 %w[ James Mary Paul Linda Dave ].each do |e|
   Alternative.create!(name: e, decision: decision)

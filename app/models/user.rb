@@ -4,7 +4,7 @@ class User
 
   field :name, type: String
 
-  has_many :user_decisions
+  has_many :memberships
 
   ##############
   ### devise

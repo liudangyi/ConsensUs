@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   resources :decisions do
+    resources :alternatives
+    resources :criteria
     member do
       get 'admin'
     end

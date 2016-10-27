@@ -11,8 +11,8 @@
   </thead>
 
   <tbody>
-    <% @user_decisions.each do |user_decision| %>
-      <% decision = user_decision.decision %>
+    <% @memberships.each do |membership| %>
+      <% decision = membership.decision %>
       <tr>
         <td><%= decision.name %></td>
         <td><%= decision.description %></td>

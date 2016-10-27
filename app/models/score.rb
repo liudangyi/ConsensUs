@@ -3,10 +3,12 @@ class Score
   include Mongoid::Timestamps
 
   field :value, type: Float
-  field :argument, type: String
+  field :argument, type: String, default: ''
+
+  validates_presence_of :value
 
   belongs_to :criterium
   belongs_to :alternative
 
-  belongs_to :user_decision
+  belongs_to :membership
 end

@@ -14,7 +14,7 @@ class Decision
   has_many :criteria
   has_many :alternatives
 
-  has_many :user_decisions
+  has_many :memberships
 
   CHARSET = ('0'..'9').to_a + ('A'..'Z').to_a + ('a'..'z').to_a
 
