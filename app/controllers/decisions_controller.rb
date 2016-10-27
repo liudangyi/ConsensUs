@@ -1,10 +1,21 @@
 class DecisionsController < ApplicationController
-  before_action :set_decision, only: [:show, :edit, :update, :destroy]
+  before_action :set_decision, only: [:show, :admin, :edit, :update, :destroy]
+  before_action :require_admin, only: [:admin, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   # GET /decisions
   # GET /decisions.json
   def index
-    @decisions = Decision.all
+    @user_decisions = current_user.user_decisions.includes(:decision)
+  end
+
+  # GET /s/:short_url
+  def expand_short_url
+    redirect_to Decision.find_by!(short_url: params[:short_url])
+  end
+
+  # GET /decisions/1/admin
+  def admin
   end
 
   # GET /decisions/1
@@ -24,10 +35,11 @@ class DecisionsController < ApplicationController
   # POST /decisions
   # POST /decisions.json
   def create
-    @decision = Decision.new(decision_params.merge(owner: current_user))
+    @decision = Decision.new(decision_params)
 
     respond_to do |format|
       if @decision.save
+        @decision.user_decisions.create(user: current_user, role: :admin)
         format.html { redirect_to @decision, notice: 'Decision was successfully created.' }
         format.json { render :show, status: :created, location: @decision }
       else
@@ -65,6 +77,11 @@ class DecisionsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_decision
       @decision = Decision.find(params[:id])
+      @user_decision = current_user.user_decisions.find_by!(decision: @decision)
+    end
+
+    def require_admin
+      raise AccessDenied unless @user_decision.owner?
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -3,7 +3,9 @@ class Criterium
   include Mongoid::Timestamps
 
   field :name, type: String
-  field :description, type: String
+  field :description, type: String, default: ''
+
+  validates_presence_of :name
 
   belongs_to :decision
 end

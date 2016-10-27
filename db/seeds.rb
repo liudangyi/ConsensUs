@@ -6,16 +6,16 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-daniel = User.create!(name: 'Daniel', email: 'daniel@ucsd.edu', password: '123456')
+daniel = User.find_or_create_by!(name: 'Daniel', email: 'daniel@ucsd.edu', password: '123456')
 
-decision = Decision.create!(name: 'FirstDecision', description: 'Our first decision', visibility: :private)
+decision = Decision.find_or_create_by!(name: 'FirstDecision', description: 'Our first decision', visibility: :private)
 
-UserDecision.create!(user: daniel, decision: decision, role: :owner)
+UserDecision.find_or_create_by!(user: daniel, decision: decision, role: :owner)
 
 %w[ James Mary Paul Linda Dave ].each do |e|
-  Alternative.new(name: e, decision: decision)
+  Alternative.create!(name: e, decision: decision)
 end
 
 ['Academic', 'Recommendation Letter', 'Readiness for Engineering'].each do |e|
-  Criterium.new(name: e, decision: decision)
+  Criterium.create!(name: e, decision: decision)
 end

@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   <strong>Name:</strong>
   <%= @decision.name %>
@@ -11,14 +9,24 @@
 </p>
 
 <p>
-  <strong>Owner:</strong>
-  <%= @decision.owner %>
-</p>
-
-<p>
   <strong>Visibility:</strong>
   <%= @decision.visibility %>
 </p>
+
+
+<h3>Alternatives:</h3>
+<ul>
+  <% @decision.alternatives.each do |alternative| %>
+  <li><%= alternative.name %></li>
+  <% end -%>
+</ul>
+
+<h3>Criteria:</h3>
+<ul>
+  <% @decision.criteria.each do |criterium| %>
+  <li><%= criterium.name %></li>
+  <% end -%>
+</ul>
 
 <%= link_to 'Edit', edit_decision_path(@decision) %> |
 <%= link_to 'Back', decisions_path %>

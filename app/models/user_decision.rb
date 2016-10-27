@@ -3,7 +3,7 @@ class UserDecision
   include Mongoid::Timestamps
 
   field :arguments, type: String
-  field :role, type: Symbol, default: :member
+  field :role, type: Symbol
 
   validates_inclusion_of :role, in: [:owner, :member]
 
@@ -11,4 +11,8 @@ class UserDecision
   belongs_to :decision
 
   has_many :scores
+
+  def owner?
+    self.role == :owner
+  end
 end

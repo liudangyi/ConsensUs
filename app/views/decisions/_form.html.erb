@@ -22,13 +22,9 @@
   </div>
 
   <div class="field">
-    <%= f.label :owner %>
-    <%= f.text_field :owner %>
-  </div>
-
-  <div class="field">
     <%= f.label :visibility %>
-    <%= f.text_field :visibility %>
+    <%= f.radio_button :visibility, :private %> Private
+    <%= f.radio_button :visibility, :public %> Public
   </div>
 
   <div class="actions">

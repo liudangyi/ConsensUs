@@ -1,0 +1,40 @@
+<h1>Admin Decision</h1>
+
+<div class="row">
+  <div class="col-md-4">
+    <h3>Info</h3>
+      Description: <%= @decision.description %> <br>
+      URL: <a href="/s/<%= @decision.short_url %>">consensus.ucsd.edu/s/<%= @decision.short_url %></a>
+    <h3>Commmittee</h3>
+    <ul>
+      <% @decision.user_decisions.includes(:user).each do |user_decision| %>
+        <li>
+          <%= user_decision.user.name %> &lt;<%= user_decision.user.email %>&gt;
+          <% if user_decision.owner? %>
+            <span class="label label-primary">Owner</span>
+          <% end -%>
+        </li>
+      <% end -%>
+    </ul>
+  </div>
+  <div class="col-md-8">
+    <h3>Alternatives</h3>
+    <ul>
+      <% @decision.alternatives.each do |alternative| %>
+        <li>
+          <h4><%= alternative.name %></h4>
+          <%= alternative.description %>
+        </li>
+      <% end -%>
+    </ul>
+    <h3>Criteria</h3>
+    <ul>
+      <% @decision.criteria.each do |criterium| %>
+        <li>
+          <h4><%= criterium.name %></h4>
+          <%= criterium.description %>
+        </li>
+      <% end -%>
+    </ul>
+  </div>
+</div>
