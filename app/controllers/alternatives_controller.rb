@@ -15,11 +15,11 @@ class AlternativesController < ApplicationController
   # POST /alternatives
   # POST /alternatives.json
   def create
-    @alternative = Alternative.new(alternative_params.merge(decision_id: params[:membership][:decision_id]))
+    @alternative = Alternative.new(alternative_params.merge(decision_id: params[:alternative][:decision_id]))
 
     respond_to do |format|
       if @alternative.save
-        format.html { redirect_to @alternative, notice: 'Alternative was successfully created.' }
+        format.html { redirect_to admin_decision_path(@alternative.decision_id), notice: 'Alternative was successfully created.' }
         format.json { render :show, status: :created, location: @alternative }
       else
         format.html { render :new }
@@ -33,7 +33,7 @@ class AlternativesController < ApplicationController
   def update
     respond_to do |format|
       if @alternative.update(alternative_params)
-        format.html { redirect_to @alternative, notice: 'Alternative was successfully updated.' }
+        format.html { redirect_to admin_decision_path(@alternative.decision_id), notice: 'Alternative was successfully updated.' }
         format.json { render :show, status: :ok, location: @alternative }
       else
         format.html { render :edit }
@@ -47,7 +47,7 @@ class AlternativesController < ApplicationController
   def destroy
     @alternative.destroy
     respond_to do |format|
-      format.html { redirect_to alternatives_url, notice: 'Alternative was successfully destroyed.' }
+      format.html { redirect_to admin_decision_path(@alternative.decision_id), notice: 'Alternative was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -60,6 +60,6 @@ class AlternativesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def alternative_params
-      params.fetch(:alternative, {})
+      params.fetch(:alternative, {}).permit(:name, :description, :color)
     end
 end

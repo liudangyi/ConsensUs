@@ -17,7 +17,7 @@ class CriteriaController < ApplicationController
 
     respond_to do |format|
       if @criterium.save
-        format.html { redirect_to @criterium, notice: 'Criterium was successfully created.' }
+        format.html { redirect_to admin_decision_path(@criterium.decision_id), notice: 'Criterium was successfully created.' }
         format.json { render :show, status: :created, location: @criterium }
       else
         format.html { render :new }
@@ -31,7 +31,7 @@ class CriteriaController < ApplicationController
   def update
     respond_to do |format|
       if @criterium.update(criterium_params)
-        format.html { redirect_to @criterium, notice: 'Criterium was successfully updated.' }
+        format.html { redirect_to admin_decision_path(@criterium.decision_id), notice: 'Criterium was successfully updated.' }
         format.json { render :show, status: :ok, location: @criterium }
       else
         format.html { render :edit }
@@ -45,7 +45,7 @@ class CriteriaController < ApplicationController
   def destroy
     @criterium.destroy
     respond_to do |format|
-      format.html { redirect_to criteria_url, notice: 'Criterium was successfully destroyed.' }
+      format.html { redirect_to admin_decision_path(@criterium.decision_id), notice: 'Criterium was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -58,6 +58,6 @@ class CriteriaController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def criterium_params
-      params.fetch(:criterium, {})
+      params.fetch(:criterium, {}).permit(:name, :description)
     end
 end

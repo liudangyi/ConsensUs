@@ -47,10 +47,11 @@
     <ul>
       <% @decision.criteria.each do |criterium| %>
         <li>
-          <h4><%= criterium.name %></h4>
+          <h4><a href="<%= edit_criterium_path(criterium) %>"><%= criterium.name %></a></h4>
           <%= criterium.description %>
         </li>
       <% end -%>
+      <li><a href="<%= new_criterium_path(decision_id: @decision.id) %>">New criterium</a></li>
     </ul>
   </div>
 </div>
