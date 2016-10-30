@@ -1,18 +1,9 @@
 class MembershipsController < ApplicationController
   before_action :set_membership, only: [:show, :edit, :update, :destroy]
 
-  # GET /memberships
-  def index
-    @memberships = Membership.all
-  end
-
-  # GET /memberships/1
-  def show
-  end
-
   # GET /memberships/new
   def new
-    @membership = Membership.new
+    @membership = Membership.new(decision_id: params[:decision_id])
   end
 
   # GET /memberships/1/edit
@@ -21,10 +12,12 @@ class MembershipsController < ApplicationController
 
   # POST /memberships
   def create
-    @membership = Membership.new(membership_params)
+    decision_id = params[:membership][:decision_id]
+    raise AccessDenied unless current_user.memberships.find_by!(decision_id: decision_id).owner?
+    @membership = Membership.new(membership_params.merge(decision_id: decision_id))
 
     if @membership.save
-      redirect_to @membership, notice: 'Membership was successfully created.'
+      redirect_to admin_decision_path(@membership.decision_id), notice: 'Membership was successfully created.'
     else
       render :new
     end
@@ -33,7 +26,7 @@ class MembershipsController < ApplicationController
   # PATCH/PUT /memberships/1
   def update
     if @membership.update(membership_params)
-      redirect_to @membership, notice: 'Membership was successfully updated.'
+      redirect_to admin_decision_path(@membership.decision_id), notice: 'Membership was successfully updated.'
     else
       render :edit
     end
@@ -42,17 +35,18 @@ class MembershipsController < ApplicationController
   # DELETE /memberships/1
   def destroy
     @membership.destroy
-    redirect_to memberships_url, notice: 'Membership was successfully destroyed.'
+    redirect_to admin_decision_path(@membership.decision_id), notice: 'Membership was successfully destroyed.'
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_membership
       @membership = Membership.find(params[:id])
+      raise AccessDenied unless current_user.memberships.find_by!(decision_id: @membership.decision_id).owner?
     end
 
     # Only allow a trusted parameter "white list" through.
     def membership_params
-      params.fetch(:membership, {})
+      params.fetch(:membership, {}).permit(:role, :invited_email)
     end
 end

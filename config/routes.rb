@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
-  resources :decisions do
-    resources :alternatives
-    resources :criteria
+  resources :memberships, except: [:index, :show]
+  resources :alternatives, except: [:index, :show]
+  resources :criteria, except: [:index, :show]
+  resources :decisions, except: [:index] do
     member do
       get 'admin'
     end

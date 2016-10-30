@@ -2,5 +2,4 @@
 
 <%= render 'form', criterium: @criterium %>
 
-<%= link_to 'Show', @criterium %> |
-<%= link_to 'Back', criteria_path %>
+<%= link_to 'Back', admin_decision_path(@criterium.decision) %>

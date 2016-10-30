@@ -65,6 +65,7 @@ class AlternativesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_alternative
       @alternative = Alternative.find(params[:id])
+      raise AccessDenied unless current_user.memberships.find_by!(decision: @alternative.decision).owner?
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
