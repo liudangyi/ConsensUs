@@ -1,20 +1,9 @@
 class CriteriaController < ApplicationController
   before_action :set_criterium, only: [:show, :edit, :update, :destroy]
 
-  # GET /criteria
-  # GET /criteria.json
-  def index
-    @criteria = Criterium.all
-  end
-
-  # GET /criteria/1
-  # GET /criteria/1.json
-  def show
-  end
-
   # GET /criteria/new
   def new
-    @criterium = Criterium.new
+    @criterium = Criterium.new(decision_id: params[:decision_id])
   end
 
   # GET /criteria/1/edit
@@ -24,7 +13,7 @@ class CriteriaController < ApplicationController
   # POST /criteria
   # POST /criteria.json
   def create
-    @criterium = Criterium.new(criterium_params)
+    @criterium = Criterium.new(criterium_params.merge(decision_id: params[:criterium][:decision_id]))
 
     respond_to do |format|
       if @criterium.save
@@ -65,7 +54,6 @@ class CriteriaController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_criterium
       @criterium = Criterium.find(params[:id])
-      raise AccessDenied unless current_user.memberships.find_by!(decision: @criterium.decision).owner?
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

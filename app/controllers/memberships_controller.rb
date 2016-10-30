@@ -1,5 +1,7 @@
 class MembershipsController < ApplicationController
   before_action :set_membership, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
+  before_action :require_admin
 
   # GET /memberships/new
   def new
@@ -12,9 +14,7 @@ class MembershipsController < ApplicationController
 
   # POST /memberships
   def create
-    decision_id = params[:membership][:decision_id]
-    raise AccessDenied unless current_user.memberships.find_by!(decision_id: decision_id).owner?
-    @membership = Membership.new(membership_params.merge(decision_id: decision_id))
+    @membership = Membership.new(membership_params.merge(decision_id: params[:membership][:decision_id]))
 
     if @membership.save
       redirect_to admin_decision_path(@membership.decision_id), notice: 'Membership was successfully created.'
@@ -34,15 +34,18 @@ class MembershipsController < ApplicationController
 
   # DELETE /memberships/1
   def destroy
-    @membership.destroy
-    redirect_to admin_decision_path(@membership.decision_id), notice: 'Membership was successfully destroyed.'
+    if @membership.user == current_user
+      redirect_to :back, notice: 'You cannot delete yourself!'
+    else
+      @membership.destroy
+      redirect_to admin_decision_path(@membership.decision_id), notice: 'Membership was successfully destroyed.'
+    end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_membership
       @membership = Membership.find(params[:id])
-      raise AccessDenied unless current_user.memberships.find_by!(decision_id: @membership.decision_id).owner?
     end
 
     # Only allow a trusted parameter "white list" through.

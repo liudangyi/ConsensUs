@@ -1,20 +1,11 @@
 class AlternativesController < ApplicationController
   before_action :set_alternative, only: [:show, :edit, :update, :destroy]
-
-  # GET /alternatives
-  # GET /alternatives.json
-  def index
-    @alternatives = Alternative.all
-  end
-
-  # GET /alternatives/1
-  # GET /alternatives/1.json
-  def show
-  end
+  before_action :authenticate_user!
+  before_action :require_admin
 
   # GET /alternatives/new
   def new
-    @alternative = Alternative.new
+    @alternative = Alternative.new(decision_id: params[:decision_id])
   end
 
   # GET /alternatives/1/edit
@@ -24,7 +15,7 @@ class AlternativesController < ApplicationController
   # POST /alternatives
   # POST /alternatives.json
   def create
-    @alternative = Alternative.new(alternative_params)
+    @alternative = Alternative.new(alternative_params.merge(decision_id: params[:membership][:decision_id]))
 
     respond_to do |format|
       if @alternative.save
@@ -65,7 +56,6 @@ class AlternativesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_alternative
       @alternative = Alternative.find(params[:id])
-      raise AccessDenied unless current_user.memberships.find_by!(decision: @alternative.decision).owner?
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

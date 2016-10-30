@@ -34,11 +34,14 @@
         <li>
           <h4>
             <span style="background-color: #<%= alternative.color %>;">&nbsp;</span>&nbsp;
-            <%= alternative.name %>
+            <a href="<%= edit_alternative_path(alternative) %>"><%= alternative.name %></a>
           </h4>
           <%= alternative.description %>
         </li>
       <% end -%>
+      <li>
+        <a href="<%= new_alternative_path(decision_id: @decision.id) %>">New alternative</a>
+      </li>
     </ul>
     <h3>Criteria</h3>
     <ul>

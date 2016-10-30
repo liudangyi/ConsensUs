@@ -11,6 +11,23 @@
     </div>
   <% end %>
 
+  <%= f.hidden_field :decision_id %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description %>
+    <%= f.text_field :description %>
+  </div>
+
+  <div class="field">
+    <%= f.label :color %>
+    <%= f.text_field :color %>
+  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>
