@@ -42,12 +42,17 @@ GEM
     autoprefixer-rails (6.5.1.1)
       execjs
     bcrypt (3.1.11)
+    better_errors (2.1.1)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
+      rack (>= 0.9.0)
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
     bson (4.1.1)
     builder (3.2.2)
-    byebug (9.0.6)
     coderay (1.1.1)
     coffee-rails (4.2.1)
       coffee-script (>= 2.2.0)
@@ -105,6 +110,8 @@ GEM
       pry (>= 0.9.10)
     puma (3.6.0)
     rack (2.0.1)
+    rack-mini-profiler (0.10.1)
+      rack (>= 1.2.0)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (5.0.0.1)
@@ -168,11 +175,6 @@ GEM
       execjs (>= 0.3.0, < 3)
     warden (1.2.6)
       rack (>= 1.0)
-    web-console (3.3.1)
-      actionview (>= 5.0)
-      activemodel (>= 5.0)
-      debug_inspector
-      railties (>= 5.0)
     websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
@@ -181,8 +183,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  better_errors
+  binding_of_caller
   bootstrap-sass
-  byebug
   coffee-rails (~> 4.2)
   color
   devise
@@ -191,6 +194,7 @@ DEPENDENCIES
   mongoid
   pry-rails
   puma (~> 3.0)
+  rack-mini-profiler
   rails (~> 5.0.0, >= 5.0.0.1)
   sass-rails (~> 5.0)
   spring
@@ -198,7 +202,6 @@ DEPENDENCIES
   turbolinks (~> 5)
   tzinfo-data
   uglifier (>= 1.3.0)
-  web-console
 
 BUNDLED WITH
    1.13.1

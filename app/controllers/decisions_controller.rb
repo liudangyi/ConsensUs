@@ -29,14 +29,17 @@ class DecisionsController < ApplicationController
 
   # POST /decisions/1/rate
   def rate
-    params[:scores].flat_map do |cid, v|
+    scores = @membership.scores.group_by { |e| e.criterium_id.to_s }.map do |cid, v|
+      [cid, v.map { |e| [e.alternative_id.to_s, e]  }.to_h]
+    end.to_h
+    params[:scores].each do |cid, v|
       v.map do |aid, value|
-        if value.present?
-          value = value.to_i
-          if score = @membership.scores.where(criterium_id: cid, alternative_id: aid).first
+        if value.present? and value.to_f != scores[cid].try { |e| e[aid].try(:value) }
+          value = value.to_f
+          if score = scores[cid].try { |e| e[aid] }
             score.update(value: value)
           else
-            @membership.scores.create!(criterium_id: cid, alternative_id: aid, value: value)
+            @membership.scores.create(criterium_id: cid, alternative_id: aid, value: value)
           end
         end
       end
