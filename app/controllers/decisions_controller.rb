@@ -1,6 +1,6 @@
 class DecisionsController < ApplicationController
-  before_action :set_decision, except: [:index, :expand_short_url]
-  before_action :require_admin, except: [:index, :expand_short_url, :show, :rate]
+  before_action :set_decision, except: [:index, :expand_short_url, :new, :create]
+  before_action :require_admin, except: [:index, :expand_short_url, :new, :create, :show, :rate]
   before_action :authenticate_user!
 
   # GET /decisions
@@ -63,7 +63,7 @@ class DecisionsController < ApplicationController
 
     respond_to do |format|
       if @decision.save
-        @decision.memberships.create(user: current_user, role: :admin)
+        @decision.memberships.create!(user: current_user, role: :owner)
         format.html { redirect_to @decision, notice: 'Decision was successfully created.' }
         format.json { render :show, status: :created, location: @decision }
       else
