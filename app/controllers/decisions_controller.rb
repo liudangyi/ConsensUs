@@ -1,6 +1,6 @@
 class DecisionsController < ApplicationController
-  before_action :set_decision, only: [:show, :admin, :edit, :update, :destroy]
-  before_action :require_admin, only: [:admin, :edit, :update, :destroy]
+  before_action :set_decision, except: [:index, :expand_short_url]
+  before_action :require_admin, except: [:index, :expand_short_url, :show, :rate]
   before_action :authenticate_user!
 
   # GET /decisions
@@ -21,6 +21,27 @@ class DecisionsController < ApplicationController
   # GET /decisions/1
   # GET /decisions/1.json
   def show
+    @scores = @membership.scores.group_by { |e| e.criterium_id }.map do |cid, v|
+      [cid, v.map { |e| [e.alternative_id, e.value]  }.to_h]
+    end.to_h
+    render :rate
+  end
+
+  # POST /decisions/1/rate
+  def rate
+    params[:scores].flat_map do |cid, v|
+      v.map do |aid, value|
+        if value.present?
+          value = value.to_i
+          if score = @membership.scores.where(criterium_id: cid, alternative_id: aid).first
+            score.update(value: value)
+          else
+            @membership.scores.create!(criterium_id: cid, alternative_id: aid, value: value)
+          end
+        end
+      end
+    end
+    redirect_to :back
   end
 
   # GET /decisions/new
@@ -77,6 +98,7 @@ class DecisionsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_decision
       @decision = Decision.find(params[:id])
+      @membership = current_user.memberships.find_by!(decision: @decision)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

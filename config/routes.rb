@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :decisions, except: [:index] do
     member do
       get 'admin'
+      post 'rate'
     end
   end
   get 's/:short_url' => 'decisions#expand_short_url'
