@@ -1,5 +1,7 @@
 class CriteriaController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_criterium, only: [:show, :edit, :update, :destroy]
+  before_action :require_admin
 
   # GET /criteria/new
   def new

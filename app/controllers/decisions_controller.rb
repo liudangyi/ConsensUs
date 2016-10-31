@@ -1,7 +1,7 @@
 class DecisionsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_decision, except: [:index, :expand_short_url, :new, :create]
   before_action :require_admin, except: [:index, :expand_short_url, :new, :create, :show, :rate]
-  before_action :authenticate_user!
 
   # GET /decisions
   # GET /decisions.json

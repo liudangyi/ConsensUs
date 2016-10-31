@@ -1,6 +1,6 @@
 class AlternativesController < ApplicationController
-  before_action :set_alternative, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
+  before_action :set_alternative, only: [:show, :edit, :update, :destroy]
   before_action :require_admin
 
   # GET /alternatives/new
