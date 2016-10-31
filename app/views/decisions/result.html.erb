@@ -1,0 +1,26 @@
+<h1><%= @decision.name %></h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <% @decision.alternatives.each do |alternative| %>
+        <th><%= alternative.name %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @decision.criteria.each do |criterium| %>
+    <tr>
+      <th><%= criterium.name %></th>
+      <% @decision.alternatives.each do |alternative| %>
+      <td>
+        <%= @scores.fetch(criterium.id, {}).fetch(alternative.id, []).map { |s| [s.membership.user.email, s.value] }.to_h %>
+      </td>
+      <% end %>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Rate', @decision %>

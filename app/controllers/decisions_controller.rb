@@ -1,7 +1,7 @@
 class DecisionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_decision, except: [:index, :expand_short_url, :new, :create]
-  before_action :require_admin, except: [:index, :expand_short_url, :new, :create, :show, :rate]
+  before_action :require_admin, except: [:index, :expand_short_url, :new, :create, :show, :rate, :result]
 
   # GET /decisions
   # GET /decisions.json
@@ -22,7 +22,7 @@ class DecisionsController < ApplicationController
   # GET /decisions/1.json
   def show
     @scores = @membership.scores.group_by { |e| e.criterium_id }.map do |cid, v|
-      [cid, v.map { |e| [e.alternative_id, e.value]  }.to_h]
+      [cid, v.map { |e| [e.alternative_id, e.value] }.to_h]
     end.to_h
     render :rate
   end
@@ -30,13 +30,13 @@ class DecisionsController < ApplicationController
   # POST /decisions/1/rate
   def rate
     scores = @membership.scores.group_by { |e| e.criterium_id.to_s }.map do |cid, v|
-      [cid, v.map { |e| [e.alternative_id.to_s, e]  }.to_h]
+      [cid, v.map { |e| [e.alternative_id.to_s, e] }.to_h]
     end.to_h
     params[:scores].each do |cid, v|
       v.map do |aid, value|
-        if value.present? and value.to_f != scores[cid].try { |e| e[aid].try(:value) }
+        if value.present? and value.to_f != scores[cid]&.[](aid)&.value
           value = value.to_f
-          if score = scores[cid].try { |e| e[aid] }
+          if score = scores[cid]&.[](aid)
             score.update(value: value)
           else
             @membership.scores.create(criterium_id: cid, alternative_id: aid, value: value)
@@ -45,6 +45,17 @@ class DecisionsController < ApplicationController
       end
     end
     redirect_to :back
+  end
+
+  # GET /decisions/1/result
+  def result
+    @scores = @decision.memberships.includes(:user, :scores).flat_map do |membership|
+      # FIXME: Eager loading
+      membership.scores
+    end
+    @scores = @scores.group_by { |e| e.criterium_id }.map do |cid, v|
+      [cid, v.group_by { |e| e.alternative_id }.to_h]
+    end.to_h
   end
 
   # GET /decisions/new

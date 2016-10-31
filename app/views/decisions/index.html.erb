@@ -6,7 +6,7 @@
       <th>Name</th>
       <th>Description</th>
       <th>Visibility</th>
-      <th colspan="4"></th>
+      <th colspan="5"></th>
     </tr>
   </thead>
 
@@ -17,7 +17,8 @@
         <td><%= decision.name %></td>
         <td><%= decision.description %></td>
         <td><%= decision.visibility %></td>
-        <td><%= link_to 'Show', decision %></td>
+        <td><%= link_to 'Rate', decision %></td>
+        <td><%= link_to 'Result', result_decision_path(decision) %></td>
         <td><%= link_to 'Admin', admin_decision_path(decision) %></td>
         <td><%= link_to 'Edit', edit_decision_path(decision) %></td>
         <td><%= link_to 'Destroy', decision, method: :delete, data: { confirm: 'Are you sure?' } %></td>

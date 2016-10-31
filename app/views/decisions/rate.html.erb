@@ -13,8 +13,6 @@
   <%= @decision.visibility %>
 </p>
 
-<%= @scores.to_json %>
-
 <%= form_tag rate_decision_path @decision do %>
 <table class="table">
   <thead>
@@ -31,7 +29,7 @@
       <th><%= criterium.name %></th>
       <% @decision.alternatives.each do |alternative| %>
       <td>
-        <%= number_field_tag "scores[#{criterium.id}][#{alternative.id}]", @scores[criterium.id].try{|e| e[alternative.id]}, min: 0, max: 100  %>
+        <%= number_field_tag "scores[#{criterium.id}][#{alternative.id}]", @scores.fetch(criterium.id, {})[alternative.id], min: 0, max: 100 %>
       </td>
       <% end %>
     </tr>
@@ -41,5 +39,6 @@
 <button class="btn btn-primary pull-right">Submit</button>
 <% end %>
 
+<%= link_to 'Result', result_decision_path(@decision) %> |
 <%= link_to 'Edit', edit_decision_path(@decision) %> |
 <%= link_to 'Back', root_path %>
