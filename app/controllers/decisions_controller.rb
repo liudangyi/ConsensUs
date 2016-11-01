@@ -21,7 +21,7 @@ class DecisionsController < ApplicationController
   # GET /decisions/1
   # GET /decisions/1.json
   def show
-    @scores = @membership.scores.group_by { |e| e.criterium_id }.map do |cid, v|
+    @scores = @current_membership.scores.group_by { |e| e.criterium_id }.map do |cid, v|
       [cid, v.map { |e| [e.alternative_id, e.value] }.to_h]
     end.to_h
     render :rate
@@ -29,7 +29,7 @@ class DecisionsController < ApplicationController
 
   # POST /decisions/1/rate
   def rate
-    scores = @membership.scores.group_by { |e| e.criterium_id.to_s }.map do |cid, v|
+    scores = @current_membership.scores.group_by { |e| e.criterium_id.to_s }.map do |cid, v|
       [cid, v.map { |e| [e.alternative_id.to_s, e] }.to_h]
     end.to_h
     params[:scores].each do |cid, v|
@@ -39,7 +39,7 @@ class DecisionsController < ApplicationController
           if score = scores[cid]&.[](aid)
             score.update(value: value)
           else
-            @membership.scores.create(criterium_id: cid, alternative_id: aid, value: value)
+            @current_membership.scores.create(criterium_id: cid, alternative_id: aid, value: value)
           end
         end
       end
@@ -112,7 +112,7 @@ class DecisionsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_decision
       @decision = Decision.find(params[:id])
-      @membership = current_user.memberships.find_by!(decision: @decision)
+      @current_membership = current_user.memberships.find_by!(decision: @decision)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

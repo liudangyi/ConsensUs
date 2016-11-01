@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   private
 
     def require_admin
-      if @membership.nil?
+      if @current_membership.nil?
         resource_name = controller_name.singularize
         instance = instance_variable_get("@#{resource_name}")
         if @decision
@@ -21,8 +21,8 @@ class ApplicationController < ActionController::Base
         else
           id = params[:decision_id] || params[resource_name][:decision_id]
         end
-        @membership = current_user.memberships.find_by!(decision_id: id)
+        @current_membership = current_user.memberships.find_by!(decision_id: id)
       end
-      raise AccessDenied unless @membership.owner?
+      raise AccessDenied unless @current_membership.owner?
     end
 end
