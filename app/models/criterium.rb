@@ -8,4 +8,12 @@ class Criterium
   validates_presence_of :name
 
   belongs_to :decision
+
+  def as_json(options = {})
+    {
+      id: id.to_s,
+      name: name,
+      description: description,
+    }
+  end
 end

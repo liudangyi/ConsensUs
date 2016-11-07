@@ -21,24 +21,20 @@ class DecisionsController < ApplicationController
   # GET /decisions/1
   # GET /decisions/1.json
   def show
-    @scores = @current_membership.scores.group_by { |e| e.criterium_id }.map do |cid, v|
-      [cid, v.map { |e| [e.alternative_id, e.value] }.to_h]
-    end.to_h
+    @scores = format_scores(@current_membership.scores) { |e| e[0].value }
     render :rate
   end
 
   # POST /decisions/1/rate
   def rate
-    scores = @current_membership.scores.group_by { |e| e.criterium_id.to_s }.map do |cid, v|
-      [cid, v.map { |e| [e.alternative_id.to_s, e] }.to_h]
-    end.to_h
+    scores = format_scores(@current_membership.scores) { |e| e[0] }
     params[:scores].each do |cid, v|
-      v.map do |aid, value|
-        if value.present? and value.to_f != scores[cid]&.[](aid)&.value
+      v.each do |aid, value|
+        if value.present? and value.to_f != scores[cid][aid]&.value
           value = value.to_f
-          if score = scores[cid]&.[](aid)
-            score.update(value: value)
-          else
+          if score = scores[cid][aid]
+            score.set(value: value)
+          elsif value >= 0
             @current_membership.scores.create(criterium_id: cid, alternative_id: aid, value: value)
           end
         end
@@ -53,9 +49,7 @@ class DecisionsController < ApplicationController
       # FIXME: Eager loading
       membership.scores
     end
-    @scores = @scores.group_by { |e| e.criterium_id }.map do |cid, v|
-      [cid, v.group_by { |e| e.alternative_id }.to_h]
-    end.to_h
+    @scores = format_scores @scores
   end
 
   # GET /decisions/new
@@ -118,5 +112,14 @@ class DecisionsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def decision_params
       params.require(:decision).permit(:name, :description, :visibility)
+    end
+
+    def format_scores scores
+      scores = scores.group_by { |e| e.criterium_id.to_s }.map do |cid, v|
+        [cid, v.group_by { |e| e.alternative_id.to_s }.map { |aid, ss| [aid, block_given? ? (yield ss) : ss] }.to_h]
+      end.to_h
+      @decision.criteria.map do |c|
+        [c.id.to_s, scores[c.id.to_s] || {}]
+      end.to_h
     end
 end

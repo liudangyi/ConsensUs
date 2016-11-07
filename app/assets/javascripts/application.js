@@ -12,4 +12,5 @@
 //
 //= require rails
 //= require turbolinks
+//= require vue
 //= require_tree .

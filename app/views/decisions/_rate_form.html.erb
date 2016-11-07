@@ -1,0 +1,129 @@
+<%= form_tag rate_decision_path(@decision), id: 'rate-form' do %>
+
+<div class="decision-rate" style="background-color: #EEE; padding: 30px 0;">
+  <div class="row">
+    <div class="col-md-10">
+      <div class="row" style="padding: 20px;">
+        <div class="col-md-3 text-right">OVERALL</div>
+        <div class="col-md-7">
+          <div class="line">
+            <div class="dot" v-for="a in alternatives" v-if="avgScores[a.id] >= 0"
+            :style="{ left: avgScores[a.id]*10 + '%', 'background-color': '#' + a.color }"></div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="dot" v-for="a, index in alternatives" v-if="avgScores[a.id] < 0"
+          :style="{ left: index * 27 + 'px', 'background-color': '#' + a.color }"></div>
+        </div>
+      </div>
+      <div class="row thin" v-for="c in criteria" style="padding: 20px;">
+        <div class="col-md-3 text-right">{{ c.name }}</div>
+        <div class="col-md-7">
+          <div class="line">
+            <div class="dot" v-for="a in alternatives" v-if="scores[c.id][a.id] >= 0"
+            :style="{ left: scores[c.id][a.id]*10 + '%', 'background-color': '#' + a.color }"
+            draggable="true" @dragStart="dragStart($event, c.id, a.id)"
+                             @drag="drag($event, c.id, a.id)"
+                             @dragEnd="dragEnd($event, c.id, a.id)"></div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="dot" v-for="a, index in alternatives" v-if="scores[c.id][a.id] < 0"
+          :style="{ left: index * 27 + 'px', 'background-color': '#' + a.color }"
+          draggable="true" @dragStart="dragStart($event, c.id, a.id)"
+                           @drag="drag($event, c.id, a.id)"
+                           @dragEnd="dragEnd($event, c.id, a.id)"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <h3>Candidates</h3>
+      <div v-for="a in alternatives">
+        <div class="small dot" :style="{ 'background-color': '#' + a.color }" style="margin-right: 5px;"></div>
+        {{ a.name }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th v-for="a in alternatives">{{ a.name }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr v-for="c in criteria">
+      <th>{{ c.name }}</th>
+      <td v-for="a in alternatives">
+        <input type="number" :name="`scores[${c.id}][${a.id}]`" v-model="scores[c.id][a.id]">
+      </td>
+    </tr>
+  </tbody>
+</table>
+<button class="btn btn-primary pull-right">Submit</button>
+<% end %>
+
+<script>
+  new Vue({
+    el: '#rate-form',
+    data() {
+      let criteria = <%= raw @decision.criteria.to_json %>
+      let alternatives = <%= raw @decision.alternatives.to_json %>
+      let scores = <%= raw @scores.to_json %>
+
+      criteria.forEach(c => {
+        alternatives.forEach(a => {
+          if (!scores[c.id][a.id]) scores[c.id][a.id] = -1
+        })
+      })
+      return { criteria, alternatives, scores }
+    },
+    computed: {
+      avgScores() {
+        let s = {}
+        this.alternatives.map(a => {
+          let scores = this.criteria.map(c => this.scores[c.id][a.id])
+          if (scores.some(s => s < 0 || s > 10)) {
+            s[a.id] = -1
+          } else {
+            s[a.id] = scores.reduce((a, b) => a + b) / scores.length
+          }
+        })
+        return s
+      }
+    },
+    methods: {
+      dragStart(e, cid, aid) {
+        let img = document.createElement('img')
+        img.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+        e.dataTransfer.setDragImage(img, 0, 0)
+        e.target.style.cursor = '-webkit-grabbing'
+
+        let line = e.target.parentNode.parentNode.querySelector('.line')
+        this.dragInfo = {
+          x: line.getBoundingClientRect().left + e.offsetX - 10,
+          width: line.offsetWidth,
+          oldScore: this.scores[cid][aid]
+        }
+        return true
+      },
+      drag(e, cid, aid) {
+        let res = (e.clientX - this.dragInfo.x) * 10 / this.dragInfo.width
+        if (res >= 0) {
+          if (this.dragInfo.oldScore < 0 || res <= 10 || res > 11) {
+            this.scores[cid][aid] = res
+          }
+        }
+        return true
+      },
+      dragEnd(e, cid, aid) {
+        if (this.scores[cid][aid] > 10) {
+          this.scores[cid][aid] = -1
+        }
+        e.toElement.style.cursor = '-webkit-grab'
+      }
+    }
+  })
+</script>

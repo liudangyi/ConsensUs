@@ -1,43 +1,8 @@
-<p>
-  <strong>Name:</strong>
-  <%= @decision.name %>
-</p>
+<p><strong>Name:</strong> <%= @decision.name %></p>
+<p><strong>Description:</strong> <%= @decision.description %></p>
+<p><strong>Visibility:</strong> <%= @decision.visibility %></p>
 
-<p>
-  <strong>Description:</strong>
-  <%= @decision.description %>
-</p>
-
-<p>
-  <strong>Visibility:</strong>
-  <%= @decision.visibility %>
-</p>
-
-<%= form_tag rate_decision_path @decision do %>
-<table class="table">
-  <thead>
-    <tr>
-      <th></th>
-      <% @decision.alternatives.each do |alternative| %>
-        <th><%= alternative.name %></th>
-      <% end %>
-    </tr>
-  </thead>
-  <tbody>
-    <% @decision.criteria.each do |criterium| %>
-    <tr>
-      <th><%= criterium.name %></th>
-      <% @decision.alternatives.each do |alternative| %>
-      <td>
-        <%= number_field_tag "scores[#{criterium.id}][#{alternative.id}]", @scores.fetch(criterium.id, {})[alternative.id], min: 0, max: 100 %>
-      </td>
-      <% end %>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
-<button class="btn btn-primary pull-right">Submit</button>
-<% end %>
+<%= render 'rate_form' %>
 
 <%= link_to 'Result', result_decision_path(@decision) %> |
 <%= link_to 'Edit', edit_decision_path(@decision) %> |

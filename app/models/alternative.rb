@@ -13,4 +13,13 @@ class Alternative
   def generate_color
     Color::HSL.new(rand(360), 80, 45).to_rgb.hex
   end
+
+  def as_json(options = {})
+    {
+      id: id.to_s,
+      name: name,
+      description: description,
+      color: color,
+    }
+  end
 end
