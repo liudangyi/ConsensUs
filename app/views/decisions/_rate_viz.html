@@ -1,5 +1,3 @@
-<%= form_tag rate_decision_path(@decision), id: 'rate-form' do %>
-
 <div class="decision-rate" style="background-color: #EEE; padding: 30px 0;">
   <div class="row">
     <div class="col-md-10">
@@ -46,32 +44,13 @@
   </div>
 </div>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th></th>
-      <th v-for="a in alternatives">{{ a.name }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr v-for="c in criteria">
-      <th>{{ c.name }}</th>
-      <td v-for="a in alternatives">
-        <input type="number" :name="`scores[${c.id}][${a.id}]`" v-model="scores[c.id][a.id]">
-      </td>
-    </tr>
-  </tbody>
-</table>
-<button class="btn btn-primary pull-right">Submit</button>
-<% end %>
-
 <script>
   new Vue({
-    el: '#rate-form',
+    el: '.decision-rate',
     data() {
-      let criteria = <%= raw @decision.criteria.to_json %>
-      let alternatives = <%= raw @decision.alternatives.to_json %>
-      let scores = <%= raw @scores.to_json %>
+      let criteria = window.criteria
+      let alternatives = window.alternatives
+      let scores = window.scores
 
       criteria.forEach(c => {
         alternatives.forEach(a => {
@@ -122,6 +101,7 @@
         if (this.scores[cid][aid] > 10) {
           this.scores[cid][aid] = -1
         }
+        setScore(cid, aid, this.scores[cid][aid])
         e.toElement.style.cursor = '-webkit-grab'
       }
     }

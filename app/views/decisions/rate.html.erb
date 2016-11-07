@@ -2,7 +2,45 @@
 <p><strong>Description:</strong> <%= @decision.description %></p>
 <p><strong>Visibility:</strong> <%= @decision.visibility %></p>
 
-<%= render 'rate_form' %>
+<%= form_tag rate_decision_path(@decision) do %>
+
+<script>
+  var criteria = <%= raw @decision.criteria.to_json %>
+  var alternatives = <%= raw @decision.alternatives.to_json %>
+  var scores = <%= raw @scores.to_json %>
+  function setScore(cid, aid, score) {
+    document.querySelector('#scores_' + cid + '_' + aid).value = score
+  }
+</script>
+
+<%= render 'rate_viz' %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <% @decision.alternatives.each do |a| %>
+      <th><%= a.name %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @decision.criteria.each do |c| %>
+    <tr>
+      <th><%= c.name %></th>
+      <% @decision.alternatives.each do |a| %>
+      <td>
+        <%= text_field_tag "scores[#{c.id}][#{a.id}]", @scores[c.id.to_s][a.id.to_s] %>
+      </td>
+      <% end %>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<button class="btn btn-primary pull-right">Submit</button>
+
+<% end %>
 
 <%= link_to 'Result', result_decision_path(@decision) %> |
 <%= link_to 'Edit', edit_decision_path(@decision) %> |
