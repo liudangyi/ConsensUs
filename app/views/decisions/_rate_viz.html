@@ -101,7 +101,7 @@
         if (this.scores[cid][aid] > 10) {
           this.scores[cid][aid] = -1
         }
-        setScore(cid, aid, this.scores[cid][aid])
+        window.setScore(cid, aid, this.scores[cid][aid])
         e.toElement.style.cursor = '-webkit-grab'
       }
     }
