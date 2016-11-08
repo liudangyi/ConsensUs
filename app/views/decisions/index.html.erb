@@ -1,31 +1,32 @@
 <h1>Decisions</h1>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Visibility</th>
-      <th colspan="5"></th>
-    </tr>
-  </thead>
+<a href="<%= destroy_user_session_path %>" data-method="delete">Log out</a>
 
-  <tbody>
-    <% @memberships.each do |membership| %>
-      <% decision = membership.decision %>
-      <tr>
-        <td><%= decision.name %></td>
-        <td><%= decision.description %></td>
-        <td><%= decision.visibility %></td>
-        <td><%= link_to 'Rate', decision %></td>
-        <td><%= link_to 'Result', result_decision_path(decision) %></td>
-        <td><%= link_to 'Admin', admin_decision_path(decision) %></td>
-        <td><%= link_to 'Edit', edit_decision_path(decision) %></td>
-        <td><%= link_to 'Destroy', decision, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<% @memberships.each do |membership| %>
+  <% decision = membership.decision %>
+  <div>
+      <div class="row">
+          <div class="col s4">
+              <div class="card blue-grey darken-1">
+                  <div class="card-content white-text">
+                      <span class="card-title"><%= decision.name %></span>
+                      <p><%= decision.description %></p>
+                      <div><%= decision.visibility %></div>
+                  </div>
+                  <div class="card-action">
+                      <div><%= link_to 'Rate', decision %></div>
+                      <div><%= link_to 'Result', result_decision_path(decision) %></div>
+                      <div><%= link_to 'Admin', admin_decision_path(decision) %></div>
+                      <div><%= link_to 'Edit', edit_decision_path(decision) %></div>
+                      <div><%= link_to 'Destroy', decision, method: :delete, data: { confirm: 'Are you sure?' } %></div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    <h3></h3>
+    <div></div>
+  </div>
+<% end %>
 
 <br>
 
