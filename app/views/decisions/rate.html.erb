@@ -5,9 +5,6 @@
 <%= form_tag rate_decision_path(@decision) do %>
 
 <script>
-  var criteria = <%= raw @decision.criteria.to_json %>
-  var alternatives = <%= raw @decision.alternatives.to_json %>
-  var scores = <%= raw @scores.to_json %>
   function setScore(cid, aid, score) {
     document.querySelector('#scores_' + cid + '_' + aid).value = score
   }
