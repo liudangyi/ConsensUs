@@ -1,26 +1,88 @@
-<h2>Log in</h2>
+<style>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
-  </div>
+  main {
+    flex: 1 0 auto;
+  }
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
-  </div>
+  .input-field input[type=date]:focus + label,
+  .input-field input[type=text]:focus + label,
+  .input-field input[type=email]:focus + label,
+  .input-field input[type=password]:focus + label {
+    color: #e91e63;
+  }
 
-  <% if devise_mapping.rememberable? -%>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+  .input-field input[type=date]:focus,
+  .input-field input[type=text]:focus,
+  .input-field input[type=email]:focus,
+  .input-field input[type=password]:focus {
+    border-bottom: 2px solid #e91e63;
+    box-shadow: none;
+  }
+
+  /* don't know why... override for now. */
+  .input-field.col label {
+    left: 0;
+  }
+
+</style>
+
+<div class="section"></div>
+<main>
+  <center>
+    <h1 class="indigo-text">ConsensUs</h1>
+    <div class="section"></div>
+
+    <h5 class="indigo-text">Please, login into your account</h5>
+    <div class="section"></div>
+
+    <div class="container">
+      <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name), class: "col s12") do |f| %>
+          <div class='row'>
+            <div class='col s12'>
+            </div>
+          </div>
+
+          <div class='row'>
+            <div class='input-field col s12'>
+              <%= f.email_field :email, autofocus: true, class: 'validate' %>
+              <%= f.label :email, 'Enter your email' %>
+            </div>
+          </div>
+
+          <div class='row'>
+            <div class='input-field col s12'>
+              <%= f.password_field :password, autocomplete: 'off', class: 'validate' %>
+              <%= f.label :password, 'Enter your password' %>
+            </div>
+            <label style='float: right;'>
+							<a class='pink-text' href='<%= new_password_path(resource_name) %>'><b>Forgot Password?</b></a>
+						</label>
+          </div>
+
+            <% if devise_mapping.rememberable? -%>
+              <div class="field">
+                <%= f.check_box :remember_me %>
+                <%= f.label :remember_me %>
+              </div>
+            <% end -%>
+
+          <br />
+          <center>
+            <div class='row'>
+              <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Login</button>
+            </div>
+          </center>
+        <% end %>
+      </div>
     </div>
-  <% end -%>
+    <a href='<%= new_registration_path(resource_name) %>'>Create account</a>
+  </center>
 
-  <div class="actions">
-    <%= f.submit "Log in" %>
-  </div>
-<% end %>
+  <div class="section"></div>
+  <div class="section"></div>
+</main>
 
-<%= render "devise/shared/links" %>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
