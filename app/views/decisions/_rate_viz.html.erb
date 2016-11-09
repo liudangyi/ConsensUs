@@ -1,9 +1,6 @@
-<div class="row" style="background-color: Gainsboro; height: 450px">
-  <div class="col-md-1"></div>
-  <div class="col-md-11">
-    <svg id="main_panel"></svg>
-    <div id="checkbox_panel"></div>
-  </div>
+<div style="position: relative; background-color: Gainsboro; height: 450px">
+  <svg id="main_panel"></svg>
+  <div id="checkbox_panel"></div>
 </div>
 
 <script>
@@ -667,6 +664,7 @@
     })
     .append('input')
     .attr('type', 'checkbox')
+    .attr('style', 'opacity: 1; position: static; left: 0; margin-right: 5px;')
     .property("checked", false);
 
   d3.select(".checkbox")
