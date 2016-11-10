@@ -1,5 +1,15 @@
 <h1><%= @decision.name %></h1>
 
+<div>
+<h4>Group Page</h4>
+This is an average of everyone's score.<br>
+"Difference between committee and you” indicates the amount of disagreement between you and other voters.<br>
+Click on the dots to see others' votes. Hover over voters to see their score and arguments.<br>
+Your task is to answer the questions below the visualization.
+</div>
+
+<%= render "result_viz" %>
+
 <table class="table">
   <thead>
     <tr>
