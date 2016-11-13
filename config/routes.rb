@@ -11,6 +11,6 @@ Rails.application.routes.draw do
   end
   get 's/:short_url' => 'decisions#expand_short_url'
 
-  devise_for :users
+  devise_for :users, controllers: { registrations: 'users/registrations' }
   root 'decisions#index'
 end

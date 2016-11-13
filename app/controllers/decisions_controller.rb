@@ -55,6 +55,7 @@ class DecisionsController < ApplicationController
   # GET /decisions/new
   def new
     @decision = Decision.new
+    render :new, layout: nil
   end
 
   # GET /decisions/1/edit
