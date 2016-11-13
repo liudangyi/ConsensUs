@@ -1,57 +1,84 @@
-<h1>Admin Decision</h1>
+<style media="screen">
+</style>
 
 <div class="row">
-  <div class="col-md-4">
-    <h3>Info</h3>
-      Description: <%= @decision.description %> <br>
-      URL: <a href="/s/<%= @decision.short_url %>">consensus.ucsd.edu/s/<%= @decision.short_url %></a> <br>
-      <%= link_to 'Edit', edit_decision_path(@decision) %>
-    <h3>Commmittee</h3>
-    <ul>
-      <% @decision.memberships.includes(:user).each do |membership| %>
-        <li>
-          <a href="<%= edit_membership_path membership %>" class="<%= 'text-muted' if membership.user.nil? %>">
-            <% if membership.user %>
-              <%= membership.user.name %> &lt;<%= membership.user.email %>&gt;
-            <% else %>
-              <%= membership.invited_email %>
-            <% end %>
-          </a>
-          <% if membership.owner? %>
-            <span class="label label-primary">Owner</span>
+  <div class="col s4">
+
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">Info</span> <%= link_to 'Edit', edit_decision_path(@decision) %>
+          <br>
+          <b>Description</b>
+          <p><%= @decision.description %></p>
+          <br>
+          <b>URL</b>
+          <br>
+          <a href="/s/<%= @decision.short_url %>">consensus.ucsd.edu/s/<%= @decision.short_url %></a> <br>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">Commmittee</span>
+        <ul>
+          <% @decision.memberships.includes(:user).each do |membership| %>
+            <li>
+              <a href="<%= edit_membership_path membership %>" class="<%= 'text-muted' if membership.user.nil? %>">
+                <% if membership.user %>
+                  <%= membership.user.name %> &lt;<%= membership.user.email %>&gt;
+                <% else %>
+                  <%= membership.invited_email %>
+                <% end %>
+              </a>
+              <% if membership.owner? %>
+                <span class="label label-primary">Owner</span>
+              <% end -%>
+            </li>
           <% end -%>
-        </li>
-      <% end -%>
-      <li>
-        <a href="<%= new_membership_path(decision_id: @decision.id) %>">New member</a>
-      </li>
-    </ul>
+          <li>
+            <a href="<%= new_membership_path(decision_id: @decision.id) %>">New member</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
   </div>
-  <div class="col-md-8">
-    <h3>Alternatives</h3>
-    <ul>
-      <% @decision.alternatives.each do |alternative| %>
-        <li>
-          <h4>
-            <span style="background-color: #<%= alternative.color %>;">&nbsp;</span>&nbsp;
-            <a href="<%= edit_alternative_path(alternative) %>"><%= alternative.name %></a>
-          </h4>
-          <%= alternative.description %>
-        </li>
-      <% end -%>
-      <li>
-        <a href="<%= new_alternative_path(decision_id: @decision.id) %>">New alternative</a>
-      </li>
-    </ul>
-    <h3>Criteria</h3>
-    <ul>
-      <% @decision.criteria.each do |criterium| %>
-        <li>
-          <h4><a href="<%= edit_criterium_path(criterium) %>"><%= criterium.name %></a></h4>
-          <%= criterium.description %>
-        </li>
-      <% end -%>
-      <li><a href="<%= new_criterium_path(decision_id: @decision.id) %>">New criterium</a></li>
-    </ul>
+
+  <div class="col s8">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">Alternatives</span>
+        <ul>
+          <% @decision.alternatives.each do |alternative| %>
+            <li>
+              <h5>
+                <span style="background-color: #<%= alternative.color %>;">&nbsp;</span>&nbsp;
+                <a href="<%= edit_alternative_path(alternative) %>"><%= alternative.name %></a>
+              </h5>
+              <%= alternative.description %>
+            </li>
+          <% end -%>
+          <li>
+            <a href="<%= new_alternative_path(decision_id: @decision.id) %>">New alternative</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">Criteria</span>
+        <ul>
+          <% @decision.criteria.each do |criterium| %>
+            <li>
+              <h4><a href="<%= edit_criterium_path(criterium) %>"><%= criterium.name %></a></h4>
+              <%= criterium.description %>
+            </li>
+          <% end -%>
+          <li><a href="<%= new_criterium_path(decision_id: @decision.id) %>">New criterium</a></li>
+        </ul>
+      </div>
+    </div>
+
   </div>
 </div>

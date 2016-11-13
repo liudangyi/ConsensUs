@@ -9,7 +9,7 @@ nav {
 
   color: $navbar-font-color;
   @extend .z-depth-1;
-  background-color: $primary-color;
+  background-color: #fff;
   width: 100%;
   height: $navbar-height-mobile;
   line-height: $navbar-height-mobile;
@@ -56,7 +56,7 @@ nav {
     color: $navbar-font-color;
     display: inline-block;
     font-size: $navbar-brand-font-size;
-    padding: 0;
+    padding-left: 30px;
     white-space: nowrap;
 
     &.center {
@@ -100,7 +100,7 @@ nav {
 
     li {
       transition: background-color .3s;
-      float: left;
+      // float: left;
       padding: 0;
 
       &.active {
