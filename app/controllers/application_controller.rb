@@ -4,11 +4,17 @@ end
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
+  layout :disable_layout_when_xhr
+
   # rescue_from AccessDenied do |exception|
   #   render status: 403, text: 'AccessDenied'
   # end
 
   private
+
+    def disable_layout_when_xhr
+      request.xhr? ? false : nil
+    end
 
     def require_admin
       if @current_membership.nil?

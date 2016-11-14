@@ -13,3 +13,15 @@
 //= require jquery
 //= require rails
 //= require_tree .
+
+$(document).ready(function() {
+  $('#modal').modal()
+  $('[data-modal=true]').click(function(e) {
+    var url = $(this).attr('href')
+    $.get(url).done(function(data) {
+      $('#modal').html(data)
+    })
+    $('#modal').modal('open')
+    return false
+  })
+})

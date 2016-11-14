@@ -1,6 +1,3 @@
-<h1>Editing Alternative</h1>
-
-<%= render 'form', alternative: @alternative %>
+<%= render 'form', alternative: @alternative, title: "Edit Alternative" %>
 
 <%= link_to 'Destroy', @alternative, method: :delete, data: { confirm: 'Are you sure?' } %> |
-<%= link_to 'Back', admin_decision_path(@alternative.decision) %>

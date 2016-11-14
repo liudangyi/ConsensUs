@@ -70,7 +70,7 @@ class DecisionsController < ApplicationController
     respond_to do |format|
       if @decision.save
         @decision.memberships.create!(user: current_user, role: :owner)
-        format.html { redirect_to @decision, notice: 'Decision was successfully created.' }
+        format.html { redirect_to admin_decision_path(@decision), notice: 'Decision was successfully created.' }
         format.json { render :show, status: :created, location: @decision }
       else
         format.html { render :new }

@@ -38,9 +38,10 @@
 
         <% if @decision %>
         <ul class="tabs tabs-transparent center">
-            <li class="tab center"><a class="active" href="#test1">Rate</a></li>
-            <li class="tab"><a href="#test2">Result</a></li>
-            <li class="tab"><a href="#test4">Admin</a></li>
+            <li class="tab" style="position: absolute; left: 50px; font-size: 18px;" ><b><%= @decision.name %></b></li>
+            <li class="tab"><%= link_to 'Rate', @decision, class: current_page?(action: 'rate') && 'active' %></li>
+            <li class="tab"><%= link_to 'Result', result_decision_path(@decision), class: current_page?(action: 'result') && 'active'%></li>
+            <li class="tab"><%= link_to 'Admin', admin_decision_path(@decision), class: current_page?(action: 'admin') && 'active' %></li>
         </ul>
         <% end %>
 
@@ -60,5 +61,16 @@
       </script>
       <%= yield %>
     </div>
+
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h4>Modal Header</h4>
+        <p>A bunch of text</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+      </div>
+    </div>
+
   </body>
 </html>

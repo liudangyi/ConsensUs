@@ -1,6 +1,2 @@
-<h1>Editing Criterium</h1>
-
-<%= render 'form', criterium: @criterium %>
-
+<%= render 'form', criterium: @criterium, title: "Edit criterium" %>
 <%= link_to 'Destroy', @criterium, method: :delete, data: { confirm: 'Are you sure?' } %> |
-<%= link_to 'Back', admin_decision_path(@criterium.decision) %>

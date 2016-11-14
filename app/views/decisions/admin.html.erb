@@ -1,12 +1,9 @@
-<style media="screen">
-</style>
-
 <div class="row">
   <div class="col s4">
 
     <div class="card">
       <div class="card-content">
-        <span class="card-title">Info</span> <%= link_to 'Edit', edit_decision_path(@decision) %>
+        <span class="card-title">Info</span> <%= link_to 'Edit', edit_decision_path(@decision), data: { modal: true } %>
           <br>
           <b>Description</b>
           <p><%= @decision.description %></p>
@@ -36,7 +33,7 @@
             </li>
           <% end -%>
           <li>
-            <a href="<%= new_membership_path(decision_id: @decision.id) %>">New member</a>
+            <%= link_to 'New Member', new_membership_path(decision_id: @decision.id), data: { modal: true } %>
           </li>
         </ul>
       </div>
@@ -53,13 +50,13 @@
             <li>
               <h5>
                 <span style="background-color: #<%= alternative.color %>;">&nbsp;</span>&nbsp;
-                <a href="<%= edit_alternative_path(alternative) %>"><%= alternative.name %></a>
+                <a href="<%= edit_alternative_path(alternative) %>" data-modal="true"><%= alternative.name %></a>
               </h5>
               <%= alternative.description %>
             </li>
           <% end -%>
           <li>
-            <a href="<%= new_alternative_path(decision_id: @decision.id) %>">New alternative</a>
+            <%= link_to 'New alternative', new_alternative_path(decision_id: @decision.id), data: { modal: true } %>
           </li>
         </ul>
       </div>
@@ -71,11 +68,11 @@
         <ul>
           <% @decision.criteria.each do |criterium| %>
             <li>
-              <h4><a href="<%= edit_criterium_path(criterium) %>"><%= criterium.name %></a></h4>
+              <h4><a href="<%= edit_criterium_path(criterium) %>" data-modal="true"><%= criterium.name %></a></h4>
               <%= criterium.description %>
             </li>
           <% end -%>
-          <li><a href="<%= new_criterium_path(decision_id: @decision.id) %>">New criterium</a></li>
+          <li><a href="<%= new_criterium_path(decision_id: @decision.id) %>" data-modal="true">New criterium</a></li>
         </ul>
       </div>
     </div>

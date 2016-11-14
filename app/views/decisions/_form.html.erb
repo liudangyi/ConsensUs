@@ -1,4 +1,6 @@
 <%= form_for(decision) do |f| %>
+<div class="modal-content">
+  <h4><%= title %></h4>
   <% if decision.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(decision.errors.count, "error") %> prohibited this decision from being saved:</h2>
@@ -27,8 +29,10 @@
     <%= f.radio_button :visibility, :public %>
     <label for="decision_visibility_public">Public</label>
   </div>
+</div>
 
-  <div class="actions">
-    <%= f.submit %>
+  <div class="modal-footer">
+    <!-- <a href="#!" class=" ">Agree</a> -->
+    <%= f.submit class: 'modal-action modal-close waves-effect waves-green btn-flat' %>
   </div>
 <% end %>

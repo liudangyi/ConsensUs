@@ -1,4 +1,6 @@
 <%= form_for(alternative) do |f| %>
+<div class="modal-content">
+  <h4><%= title %></h4>
   <% if alternative.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(alternative.errors.count, "error") %> prohibited this alternative from being saved:</h2>
@@ -27,8 +29,9 @@
     <%= f.label :color %>
     <%= f.text_field :color %>
   </div>
+</div>
 
-  <div class="actions">
-    <%= f.submit %>
+  <div class="modal-footer">
+    <%= f.submit class: 'modal-action modal-close waves-effect waves-green btn-flat' %>
   </div>
 <% end %>

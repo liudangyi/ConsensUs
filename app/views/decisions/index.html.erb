@@ -1,46 +1,42 @@
 <style media="screen">
-  .tag {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
+.tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
 </style>
-
-
 
 <br>
 <h5>My Decisions</h5>
-
-<div>
-  <div class="row">
-<% @memberships.each do |membership| %>
+<div class="row">
+  <% @memberships.each do |membership| %>
   <% decision = membership.decision %>
-    <div class="col s3">
-        <div class="card white">
-            <div class="card-content black-text">
-                <span class="card-title"><%= decision.name %></span>
-                <p><%= decision.description %></p>
-                <span class="new badge grey tag" data-badge-caption="" style="position:0px"><%= decision.visibility %></span>
-            </div>
-            <div class="card-action">
-                <div><%= link_to 'Rate', decision %></div>
-                <div><%= link_to 'Result', result_decision_path(decision) %></div>
-                <div><%= link_to 'Admin', admin_decision_path(decision) %></div>
-                <div><%= link_to 'Edit', edit_decision_path(decision) %></div>
-                <div><%= link_to 'Destroy', decision, method: :delete, data: { confirm: 'Are you sure?' } %></div>
-            </div>
-        </div>
-    </div>
-<% end %>
   <div class="col s3">
     <div class="card white">
-        <div class="card-content black-text">
-            <span class="card-title"><%= link_to 'New Decision', new_decision_path %></span>
-        </div>
+      <div class="card-content black-text">
+        <a href="<%= decision_path(decision) %>">
+        <span class="card-title"><%= decision.name %></span></a>
+        <p><%= decision.description %></p>
+        <span class="new badge grey tag" data-badge-caption="" style="position:0px"><%= decision.visibility %></span>
+      </div>
+      <!-- <div class="card-action">
+        <div><%= link_to 'Rate', decision %></div>
+        <div><%= link_to 'Result', result_decision_path(decision) %></div>
+        <div><%= link_to 'Admin', admin_decision_path(decision) %></div>
+        <div><%= link_to 'Destroy', decision, method: :delete, data: { confirm: 'Are you sure?' } %></div>
+      </div> -->
+    </div>
+  </div>
+  <% end %>
+  <div class="col s3">
+    <div class="card white">
+      <div class="card-content black-text">
+        <span class="card-title"><%= link_to 'New Decision', new_decision_path, data: { modal: true }  %></span>
+      </div>
 
     </div>
   </div>
 
 
-  </div>
+</div>
 </div>

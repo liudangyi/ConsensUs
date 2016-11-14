@@ -136,7 +136,7 @@
 
   scores = <%= raw ([
       [0] + @decision.alternatives.map do |a|
-        if @decision.criteria.any? { |c| (@scores[c.id.to_s][a.id.to_s] || -1) < 0 }
+        if @decision.criteria.any? { |c| (@scores[c.id.to_s][a.id.to_s] || -1) < 0 } or @decision.criteria.count == 0
           -1
         else
           @decision.criteria.map { |c| @scores[c.id.to_s][a.id.to_s] }.reduce(:+) / @decision.criteria.count
