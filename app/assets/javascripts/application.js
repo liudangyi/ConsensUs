@@ -29,10 +29,14 @@ $(document).ready(function() {
   // why it does not work when put in html.erb in <script>
   $('.expand-toggle').click(function(e) {
     e.preventDefault();
-    var notthis = $('.active').not(this);
-    // notthis.find('.icon-minus').addClass('icon-plus').removeClass('icon-minus');
-    notthis.toggleClass('active').next('.faqanswer').slideToggle(300);
-    $(this).toggleClass('active').next().next().slideToggle("fast");
-    // $(this).children('i').toggleClass('icon-plus icon-minus');
+    var notthis = $('.expand-toggle.active').not(this);
+    notthis.find('.material-icons').text("expand_more");
+    notthis.toggleClass('active').parent().siblings('.expand-detail').slideToggle(300);
+    $(this).toggleClass('active').parent().siblings('.expand-detail').slideToggle("fast");
+    if ($(this).children('i').text() == "expand_more") {
+      $(this).children('i').text("expand_less");
+    } else {
+      $(this).children('i').text("expand_more");
+    }
   });
 })
