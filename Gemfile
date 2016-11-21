@@ -30,6 +30,8 @@ gem 'mongoid'
 gem 'devise'
 gem 'color'
 
+gem 'jquery-minicolors-rails'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

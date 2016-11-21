@@ -38,26 +38,46 @@
         </ul>
       </div>
     </div>
-
   </div>
+
+  <style media="screen">
+    .expand-detail {
+      display: none;
+    }
+  </style>
 
   <div class="col s8">
     <div class="card">
       <div class="card-content">
         <span class="card-title">Alternatives</span>
-        <ul>
+        <ul class="collection">
           <% @decision.alternatives.each do |alternative| %>
-            <li>
-              <h5>
-                <span style="background-color: #<%= alternative.color %>;">&nbsp;</span>&nbsp;
-                <a href="<%= edit_alternative_path(alternative) %>" data-modal="true"><%= alternative.name %></a>
-              </h5>
-              <%= alternative.description %>
+            <li class="collection-item">
+                <span style="background-color: <%= alternative.color %>;">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;
+                <!-- <span contenteditable="true">c<%= alternative.name %></span> -->
+                <span><%= alternative.name %></span>
+                <!-- <%= link_to 'Destroy', alternative, method: :delete, data: { confirm: 'Are you sure?' } %> -->
+                || <a href="#" class="expand-toggle">[DETAIL]</a>
+                <div class="secondary-content">
+                  <a class="secondary-content" href="<%= alternative_path(alternative) %>" data-method="delete" data-confirm="Are you sure?" rel="nofollow">
+                    <i class="material-icons">delete</i>
+                  </a>
+                  <a class="secondary-content" href="<%= edit_alternative_path(alternative) %>" data-modal="true">
+                    <i class="material-icons">mode_edit</i>
+                  </a>
+                </div>
+
+                <div class="expand-detail">
+                  <%= alternative.description %>
+                </div>
+
             </li>
           <% end -%>
-          <li>
-            <%= link_to 'New alternative', new_alternative_path(decision_id: @decision.id), data: { modal: true } %>
-          </li>
+            <li background-color="grey">
+              <div class="center">
+                <a href="<%= new_alternative_path(decision_id: @decision.id) %>" data-modal="true"><i class="material-icons">add</i></a>
+              </div>
+            </li>
         </ul>
       </div>
     </div>
