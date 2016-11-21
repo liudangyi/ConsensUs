@@ -15,7 +15,7 @@
     <tr>
       <td style="text-align: right;"><%= criterium&.name || 'Overall' %></td>
       <td>
-        <svg class="<%= criterium ? 'criterium' : 'overall' %>" width="<%= width + 200 %>" height="<%= height %>">
+        <svg class="<%= criterium ? 'criterium' : 'overall' %>" width="<%= width + 100 %>" height="<%= height %>">
           <rect y="<%= height / 2 - (criterium ? 1 : 10) %>" x="10" fill="#CCC"
             width="<%= width %>" height="<%= criterium ? 2 : 20 %>" rx="<%= criterium ? 1 : 10 %>"></rect>
         </svg>
@@ -40,8 +40,32 @@ var xPos = function(x, i) {
   }
 }
 
+criteria.unshift({ id: 'overall' })
+
+scores['overall'] = {}
+alternatives.forEach(a => {
+  var count = {}, sum = 0
+  scores['overall'][a.id] = {}
+  criteria.forEach(c => {
+    if (!scores[c.id][a.id]) return
+    for (k in scores[c.id][a.id]) {
+      if (scores[c.id][a.id][k] >= 0) {
+        if (!scores['overall'][a.id][k]) {
+          scores['overall'][a.id][k] = 0
+          count[k] = 0
+        }
+        count[k]++
+        scores['overall'][a.id][k] += scores[c.id][a.id][k]
+      }
+    }
+  })
+  for (k in scores['overall'][a.id]) {
+    scores['overall'][a.id][k] /= count[k]
+  }
+})
+
 d3.select('#rate-viz')
-  .selectAll('svg.criterium')
+  .selectAll('svg')
   .data(criteria)
   .each(draw)
 
