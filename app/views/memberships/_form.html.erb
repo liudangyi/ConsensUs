@@ -22,9 +22,10 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :role %>
-    <%= f.radio_button :role, :owner %> Owner
-    <%= f.radio_button :role, :member %> Member
+    <%= f.radio_button :role, :owner %>
+    <label for="membership_role_owner">Owner</label> <br>
+    <%= f.radio_button :role, :member %>
+    <label for="membership_role_member">Member</label>
   </div>
 </div>
 

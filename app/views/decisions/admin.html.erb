@@ -20,7 +20,7 @@
         <ul>
           <% @decision.memberships.includes(:user).each do |membership| %>
             <li>
-              <a href="<%= edit_membership_path membership %>" class="<%= 'text-muted' if membership.user.nil? %>">
+              <a href="<%= edit_membership_path membership %>" class="<%= 'text-muted' if membership.user.nil? %>" data-modal="true">
                 <% if membership.user %>
                   <%= membership.user.name %> &lt;<%= membership.user.email %>&gt;
                 <% else %>
