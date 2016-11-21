@@ -49,7 +49,7 @@ class DecisionsController < ApplicationController
       # FIXME: Eager loading
       membership.scores
     end
-    @scores = format_scores @scores
+    @scores = format_scores(@scores) { |ss| ss.map { |s| [s.membership.user.email, s.value] }.to_h }
   end
 
   # GET /decisions/new

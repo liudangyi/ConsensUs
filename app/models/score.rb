@@ -11,4 +11,8 @@ class Score
   belongs_to :alternative
 
   belongs_to :membership
+
+  def as_json(option = {})
+    value
+  end
 end

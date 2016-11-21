@@ -17,7 +17,7 @@
       <th><%= criterium.name %></th>
       <% @decision.alternatives.each do |alternative| %>
       <td>
-        <%= @scores[criterium.id.to_s][alternative.id.to_s]&.map { |s| [s.membership.user.email, s.value] }.to_h %>
+        <%= @scores[criterium.id.to_s][alternative.id.to_s] %>
       </td>
       <% end %>
     </tr>

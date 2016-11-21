@@ -11,7 +11,7 @@
 // about supported directives.
 //
 //= require jquery
-//= require rails
+//= require jquery_ujs
 //= require_tree .
 //= require jquery.minicolors
 
