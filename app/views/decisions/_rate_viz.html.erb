@@ -124,7 +124,7 @@ function showLabel(label) {
 
 function dragStart() {
   d3.select(this).attr('opacity', 0.8)
-  showLabel(d3.select(this.parentNode).select('.label'))
+  dragMove.apply(this, arguments)
 }
 
 function dragMove(a) {
