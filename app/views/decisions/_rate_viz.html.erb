@@ -4,7 +4,7 @@
 %>
 
 <style>
-  use {
+  circle.hover {
     stroke-width: 1px;
     stroke: #999;
   }
@@ -33,7 +33,7 @@
   <h6>Alternatives</h6>
   <% @decision.alternatives.each do |a| %>
   <div>
-    <span class="label label<%= a.id %>">
+    <span class="label a-<%= a.id %>">
       <span class="dot" style="background-color: <%= a.color %>"></span> <%= a.name %>
     </span>
   </div>
@@ -84,11 +84,19 @@ function drawIndividual() {
         .selectAll('circle')
         .data(alternatives.map((a, i) => ({ id: a.id, color: a.color, cid: cid, index: i })))
       .enter().append('circle')
+        .attr('class', a => 'a-' + a.cid + '-' + a.id)
         .attr('cx', a => xPos(scores[a.cid][a.id], a.index))
         .attr('cy', <%= height / 2 %>)
         .attr('r', 10)
         .attr('fill', a => a.color)
         .call(drag)
+        .on('mouseover', function(a) {
+          d3.selectAll('.a-' + a.id + ', .a-' + a.cid + '-' + a.id).classed('hover', true)
+          d3.select(this).raise()
+        })
+        .on('mouseout', a => {
+          d3.selectAll('.a-' + a.id + ', .a-' + a.cid + '-' + a.id).classed('hover', false)
+        })
     })
 }
 
@@ -99,7 +107,6 @@ function updateAvg() {
 }
 
 function dragStart() {
-  d3.select(this).raise()
 }
 
 function dragMove(a) {
