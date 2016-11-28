@@ -8,14 +8,70 @@
     stroke-width: 1px;
     stroke: #999;
   }
+  .member-left {
+    position: absolute;
+    width: 15%;
+    margin-top: 20px;
+    left: 0;
+    text-align: right;
+  }
+  .member-left .member {
+    padding: 2px 4px;
+  }
+  .member-left .member:hover {
+    background-color: #CCC;
+  }
+  .alternatives-right {
+    position: absolute;
+    width: 15%;
+    margin-top: 20px;
+    right: 0;
+  }
+  .alternatives-right .label {
+    padding: 2px 4px;
+  }
+  .alternatives-right .dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    margin-right: 5px;
+  }
+  .alternatives-right .hover {
+    background-color: #CCC;
+  }
+  polyline.label {
+    visibility: hidden;
+  }
+  polyline.label.hover {
+    visibility: visible;
+  }
 </style>
 
-<table id="rate-viz">
+<div class="member-left">
+  <h6>Members</h6>
+  <% @decision.memberships.includes(:user).each do |m| %>
+  <div><span class="member" data-id="<%= m.user.email %>"><%= m.user.name %></span></div>
+  <% end %>
+</div>
+
+<div class="alternatives-right">
+  <h6>Alternatives</h6>
+  <% @decision.alternatives.each do |a| %>
+  <div>
+    <span class="label label<%= a.id %>">
+      <span class="dot" style="background-color: <%= a.color %>"></span> <%= a.name %>
+    </span>
+  </div>
+  <% end %>
+</div>
+
+<table id="rate-viz" style="margin-top: 20px;">
   <% ([nil] + @decision.criteria).each do |criterium| %>
     <tr>
       <td style="text-align: right;"><%= criterium&.name || 'Overall' %></td>
       <td>
-        <svg class="<%= criterium ? 'criterium' : 'overall' %>" width="<%= width + 100 %>" height="<%= height %>">
+        <svg class="<%= criterium ? 'criterium' : 'overall' %>" width="<%= width + 130 %>" height="<%= height %>">
           <rect y="<%= height / 2 - (criterium ? 1 : 10) %>" x="10" fill="#CCC"
             width="<%= width %>" height="<%= criterium ? 2 : 20 %>" rx="<%= criterium ? 1 : 10 %>"></rect>
         </svg>
@@ -29,6 +85,7 @@ var criteria = <%= raw @decision.criteria.to_json %>
 var alternatives = <%= raw @decision.alternatives.to_json %>
 var scores = <%= raw @scores.to_json %>
 var myself = <%= raw current_user.email.to_json %>
+var current_user = <%= raw current_user.email.to_json %>
 
 var overall = d3.select('#overall')
 var xScale = d3.scaleLinear().domain([0, 10]).range([10, <%= width + 10 %>])
@@ -40,46 +97,59 @@ var xPos = function(x, i) {
   }
 }
 
-criteria.unshift({ id: 'overall' })
+scores['avg'] = calcAvgs()
+drawGroup()
 
-scores['overall'] = {}
-alternatives.forEach(a => {
-  var count = {}, sum = 0
-  scores['overall'][a.id] = {}
-  criteria.forEach(c => {
-    if (!scores[c.id][a.id]) return
-    for (k in scores[c.id][a.id]) {
-      if (scores[c.id][a.id][k] >= 0) {
-        if (!scores['overall'][a.id][k]) {
-          scores['overall'][a.id][k] = 0
-          count[k] = 0
-        }
-        count[k]++
-        scores['overall'][a.id][k] += scores[c.id][a.id][k]
-      }
-    }
-  })
-  for (k in scores['overall'][a.id]) {
-    scores['overall'][a.id][k] /= count[k]
-  }
+$('.member').hover(function() {
+  clearCanvas()
+  drawIndividual($(this).data('id'))
+}, function() {
+  clearCanvas()
+  drawGroup()
 })
 
-d3.select('#rate-viz')
-  .selectAll('svg')
-  .data(criteria)
-  .each(draw)
+function clearCanvas() {
+  $('#rate-viz svg > :not(rect)').remove()
+}
 
-function draw(c, i) {
+function drawIndividual(uid) {
+  var cids = criteria.map(c => c.id)
+  cids.unshift('avg')
+  d3.select('#rate-viz')
+    .selectAll('svg')
+    .data(cids)
+    .each(function(cid, i) {
+      d3.select(this)
+        .selectAll('circle')
+        .data(alternatives)
+      .enter().append('circle')
+        .attr('cx', (a, i) => xPos(scores[cid][a.id][uid], i))
+        .attr('cy', <%= height / 2 %>)
+        .attr('r', () => i ? 5 : 10)
+        .attr('fill', a => a.color)
+    })
+}
+
+function drawGroup() {
+  var cids = criteria.map(c => c.id)
+  cids.unshift('avg')
+  d3.select('#rate-viz')
+    .selectAll('svg')
+    .data(cids)
+    .each(drawSingle)
+}
+
+function drawSingle(cid, i) {
   var g = d3.select(this)
   var avgs = {}
   var dots = []
 
   alternatives.forEach(a => {
     var count = 0, sum = 0
-    for (k in scores[c.id][a.id]) {
-      if (scores[c.id][a.id][k] >= 0) {
+    for (k in scores[cid][a.id]) {
+      if (scores[cid][a.id][k] >= 0) {
         count++
-        sum += scores[c.id][a.id][k]
+        sum += scores[cid][a.id][k]
       }
     }
     if (count > 0) {
@@ -89,24 +159,26 @@ function draw(c, i) {
   })
 
   alternatives.forEach((a, i) => {
-    dots.push({ id: a.id, type: 'myself', r: 5, index: i, color: a.color, score: scores[c.id][a.id][myself] })
+    dots.push({ id: a.id, type: 'myself', r: 5, index: i, color: a.color, score: scores[cid][a.id][myself] })
   })
 
   g.selectAll('circle')
     .data(dots)
   .enter().append('circle')
-    .attr('id', a => a.type + c.id + a.id)
+    .attr('id', a => a.type + cid + a.id)
     .attr('cx', (a, i) => xPos(a.score, a.index))
     .attr('cy', <%= height / 2 %>)
     .attr('r', a => a.r)
-    .attr('fill', a => '#' + a.color)
+    .attr('fill', a => a.color)
     .on('mouseover', a => {
-      g.select('.label' + c.id + a.id).attr('visibility', 'show')
-      use1.attr('xlink:href', '#average' + c.id + a.id)
-      use2.attr('xlink:href', '#myself' + c.id + a.id)
+      g.select('.label' + cid + a.id).classed('hover', true)
+      d3.select('.alternatives-right .label' + a.id).classed('hover', true)
+      use1.attr('xlink:href', '#average' + cid + a.id)
+      use2.attr('xlink:href', '#myself' + cid + a.id)
     })
     .on('mouseout', a => {
-      g.select('.label' + c.id + a.id).attr('visibility', 'hidden')
+      g.select('.label' + cid + a.id).classed('hover', false)
+      d3.select('.alternatives-right .label' + a.id).classed('hover', false)
       use1.attr('xlink:href', '')
       use2.attr('xlink:href', '')
     })
@@ -117,21 +189,45 @@ function draw(c, i) {
   g.selectAll('polyline')
     .data(alternatives)
   .enter().append('polyline')
-    .attr('class', a => 'label' + c.id + a.id)
+    .attr('class', a => 'label label' + cid + a.id)
     .attr('fill', 'none')
     .attr('stroke', '#F00')
     .attr('stroke-width', 2)
     .attr('stroke-linejoin', 'round')
-    .attr('visibility', 'hidden')
     .attr('pointer-events', 'none')
     .attr('points', a => {
       var left = avgs[a.id] * <%= width / 10 %> + 10
-      var right = scores[c.id][a.id][myself] * <%= width / 10 %> + 10
+      var right = scores[cid][a.id][myself] * <%= width / 10 %> + 10
       if (left >= 0 && right >= 0) {
         return `${left},20 ${left},1 ${right},1 ${right},20`
       }
       return ''
     })
+}
+
+function calcAvgs() {
+  var avgs = {}
+  alternatives.forEach(a => {
+    var count = {}, sum = 0
+    avgs[a.id] = {}
+    criteria.forEach(c => {
+      if (!scores[c.id][a.id]) return
+      for (k in scores[c.id][a.id]) {
+        if (scores[c.id][a.id][k] >= 0) {
+          if (!avgs[a.id][k]) {
+            avgs[a.id][k] = 0
+            count[k] = 0
+          }
+          count[k]++
+          avgs[a.id][k] += scores[c.id][a.id][k]
+        }
+      }
+    })
+    for (k in avgs[a.id]) {
+      avgs[a.id][k] /= count[k]
+    }
+  })
+  return avgs
 }
 
 </script>

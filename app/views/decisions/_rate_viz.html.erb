@@ -126,7 +126,7 @@
     .attr("height", padding_y)
     .attr("opacity", 0);
 
-  var color = <%= raw @decision.alternatives.map { |a| "##{a.color}" } %>;
+  var color = <%= raw @decision.alternatives.map { |a| "#{a.color}" } %>;
 
   // scores = [
   //   [0, -1, -1, -1], // overall [invalid, candidate1, candidate2, candidate 3]
