@@ -8,6 +8,7 @@ class Criterium
   validates_presence_of :name
 
   belongs_to :decision
+  has_many :scores, dependent: :destroy
 
   def as_json(options = {})
     {

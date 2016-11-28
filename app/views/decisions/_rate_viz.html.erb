@@ -109,7 +109,7 @@ function drawIndividual() {
 function updateAvg() {
   d3.select('svg.overall')
     .selectAll('circle')
-    .attr('cx', (a, i) => xPos(scores[a.cid][a.id], i))
+    .attr('cx', a => xPos(scores[a.cid][a.id], a.index))
 }
 
 function showLabel(label) {

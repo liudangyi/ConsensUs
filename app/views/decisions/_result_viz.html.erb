@@ -1,6 +1,6 @@
 <%
   width = 500
-  height = 40
+  height = 80
 %>
 
 <style>
@@ -51,7 +51,7 @@
 <div class="member-left">
   <h6>Members</h6>
   <% @decision.memberships.includes(:user).each do |m| %>
-  <div><span class="member" data-id="<%= m.user.email %>"><%= m.user.name %></span></div>
+  <div><span class="member" data-id="<%= m.user.email %>"><%= m.user.name %> (<%= m.scores.select{|s| s.value >= 0}.count * 100 / (@decision.criteria.count * @decision.alternatives.count) %>%)</span></div>
   <% end %>
 </div>
 
@@ -70,7 +70,7 @@
   <% ([nil] + @decision.criteria).each do |criterium| %>
     <tr>
       <td style="text-align: right;"><%= criterium&.name || 'Overall' %></td>
-      <td>
+      <td style="padding: 0">
         <svg class="<%= criterium ? 'criterium' : 'overall' %>" width="<%= width + 150 %>" height="<%= height %>">
           <rect y="<%= height / 2 - (criterium ? 1 : 10) %>" x="20" fill="#CCC"
             width="<%= width %>" height="<%= criterium ? 2 : 20 %>" rx="<%= criterium ? 1 : 10 %>"></rect>
@@ -95,6 +95,12 @@ var xPos = function(x, i) {
     return <%= width %> + 35 + i * 15
   }
 }
+
+criteria.forEach(c => {
+  alternatives.forEach(a => {
+    if (!scores[c.id][a.id]) scores[c.id][a.id] = {}
+  })
+})
 
 scores['avg'] = calcAvgs()
 drawGroup()

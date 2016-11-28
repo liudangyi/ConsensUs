@@ -9,9 +9,10 @@ class Alternative
   validates_presence_of :name, :color
 
   belongs_to :decision
+  has_many :scores, dependent: :destroy
 
   def generate_color
-    '#' + Color::HSL.new(rand(360), 80, 45).to_rgb.hex
+    '#' + Color::HSL.new(rand(360), 80, 55).to_rgb.hex
   end
 
   def as_json(options = {})
