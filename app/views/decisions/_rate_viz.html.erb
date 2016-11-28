@@ -1,6 +1,6 @@
 <%
   width = 500
-  height = 40
+  height = 80
 %>
 
 <style>
@@ -44,10 +44,14 @@
   <% ([nil] + @decision.criteria).each do |criterium| %>
     <tr>
       <td style="text-align: right;"><%= criterium&.name || 'Overall' %></td>
-      <td>
-        <svg class="<%= criterium ? 'criterium' : 'overall' %>" width="<%= width + 130 %>" height="<%= height %>">
-          <rect y="<%= height / 2 - (criterium ? 1 : 10) %>" x="10" fill="#CCC"
+      <td style="padding: 0">
+        <svg class="<%= criterium ? 'criterium' : 'overall' %>" width="<%= width + 150 %>" height="<%= height %>">
+          <rect y="<%= height / 2 - (criterium ? 1 : 10) %>" x="20" fill="#CCC"
             width="<%= width %>" height="<%= criterium ? 2 : 20 %>" rx="<%= criterium ? 1 : 10 %>"></rect>
+          <g class="label" visibility="hidden">
+            <polygon points="-17,0 17,0 17,20 4,20 0,24 -4,20 -17,20" fill="#000" opacity="0.8"></polygon>
+            <text fill="#FFF" y="15" text-anchor="middle">5.5</text>
+          </g>
         </svg>
       </td>
     </tr>
@@ -59,7 +63,7 @@ var criteria = <%= raw @decision.criteria.to_json %>
 var alternatives = <%= raw @decision.alternatives.to_json %>
 var scores = <%= raw @scores.to_json %>
 
-var xScale = d3.scaleLinear().domain([0, 10]).range([10, <%= width + 10 %>])
+var xScale = d3.scaleLinear().domain([0, 10]).range([20, <%= width + 20 %>])
 var xPos = function(x, i) {
   if (x >= 0 && x <= 10) {
     return xScale(x)
@@ -89,13 +93,15 @@ function drawIndividual() {
         .attr('cy', <%= height / 2 %>)
         .attr('r', 10)
         .attr('fill', a => a.color)
-        .call(drag)
         .on('mouseover', function(a) {
           d3.selectAll('.a-' + a.id + ', .a-' + a.cid + '-' + a.id).classed('hover', true)
           d3.select(this).raise()
         })
         .on('mouseout', a => {
           d3.selectAll('.a-' + a.id + ', .a-' + a.cid + '-' + a.id).classed('hover', false)
+        })
+        .each(function() {
+          if (cid != 'avg') drag(d3.select(this))
         })
     })
 }
@@ -106,23 +112,47 @@ function updateAvg() {
     .attr('cx', (a, i) => xPos(scores[a.cid][a.id], i))
 }
 
+function showLabel(label) {
+  var score = xScale.invert(d3.event.x)
+  if (score >= 0 && score <= 10) {
+    label.attr('transform', 'translate(' + d3.event.x + ')').attr('visibility', 'visible')
+    label.select('text').text(Math.round(score*10)/10)
+  } else {
+    label.attr('visibility', 'hidden')
+  }
+}
+
 function dragStart() {
+  d3.select(this).attr('opacity', 0.8)
+  showLabel(d3.select(this.parentNode).select('.label'))
 }
 
 function dragMove(a) {
+  if (d3.event.x < 20) {
+    d3.event.x = 20
+  }
+  if (d3.event.x > <%= width + 20 %> && d3.event.x < <%= width + 30 %>) {
+    d3.event.x = <%= width + 20 %>
+  }
+  if (d3.event.x > <%= width + 140 %>) {
+    d3.event.x = <%= width + 140 %>
+  }
   d3.select(this).attr('cx', d3.event.x)
   var score = xScale.invert(d3.event.x)
   if (score < 0 || score > 10) {
     score = -1
   }
   scores[a.cid][a.id] = score
+  showLabel(d3.select(this.parentNode).select('.label'))
   calcAvgs()
   updateAvg()
 }
 
 function dragEnd(a) {
+  d3.select(this).attr('opacity', 1)
   setScore(a.cid, a.id, scores[a.cid][a.id])
   d3.select(this).attr('cx', a => xPos(scores[a.cid][a.id], a.index))
+  d3.select(this.parentNode).select('.label').attr('visibility', 'hidden')
 }
 
 function calcAvgs() {

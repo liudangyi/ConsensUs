@@ -71,8 +71,8 @@
     <tr>
       <td style="text-align: right;"><%= criterium&.name || 'Overall' %></td>
       <td>
-        <svg class="<%= criterium ? 'criterium' : 'overall' %>" width="<%= width + 130 %>" height="<%= height %>">
-          <rect y="<%= height / 2 - (criterium ? 1 : 10) %>" x="10" fill="#CCC"
+        <svg class="<%= criterium ? 'criterium' : 'overall' %>" width="<%= width + 150 %>" height="<%= height %>">
+          <rect y="<%= height / 2 - (criterium ? 1 : 10) %>" x="20" fill="#CCC"
             width="<%= width %>" height="<%= criterium ? 2 : 20 %>" rx="<%= criterium ? 1 : 10 %>"></rect>
         </svg>
       </td>
@@ -87,7 +87,7 @@ var scores = <%= raw @scores.to_json %>
 var myself = <%= raw current_user.email.to_json %>
 var current_user = <%= raw current_user.email.to_json %>
 
-var xScale = d3.scaleLinear().domain([0, 10]).range([10, <%= width + 10 %>])
+var xScale = d3.scaleLinear().domain([0, 10]).range([20, <%= width + 20 %>])
 var xPos = function(x, i) {
   if (x >= 0 && x <= 10) {
     return xScale(x)
@@ -188,8 +188,8 @@ function drawSingle(cid, i) {
     .attr('stroke-linejoin', 'round')
     .attr('pointer-events', 'none')
     .attr('points', a => {
-      var left = avgs[a.id] * <%= width / 10 %> + 10
-      var right = scores[cid][a.id][myself] * <%= width / 10 %> + 10
+      var left = avgs[a.id] * <%= width / 10 %> + 20
+      var right = scores[cid][a.id][myself] * <%= width / 10 %> + 20
       if (left >= 0 && right >= 0) {
         return `${left},20 ${left},1 ${right},1 ${right},20`
       }
