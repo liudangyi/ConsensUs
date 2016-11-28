@@ -11,7 +11,7 @@ class Alternative
   belongs_to :decision
 
   def generate_color
-    Color::HSL.new(rand(360), 80, 45).to_rgb.hex
+    '#' + Color::HSL.new(rand(360), 80, 45).to_rgb.hex
   end
 
   def as_json(options = {})
