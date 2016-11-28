@@ -87,7 +87,6 @@ var scores = <%= raw @scores.to_json %>
 var myself = <%= raw current_user.email.to_json %>
 var current_user = <%= raw current_user.email.to_json %>
 
-var overall = d3.select('#overall')
 var xScale = d3.scaleLinear().domain([0, 10]).range([10, <%= width + 10 %>])
 var xPos = function(x, i) {
   if (x >= 0 && x <= 10) {
@@ -208,7 +207,7 @@ function drawSingle(cid, i) {
 function calcAvgs() {
   var avgs = {}
   alternatives.forEach(a => {
-    var count = {}, sum = 0
+    var count = {}
     avgs[a.id] = {}
     criteria.forEach(c => {
       if (!scores[c.id][a.id]) return
