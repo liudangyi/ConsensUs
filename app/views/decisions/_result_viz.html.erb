@@ -27,15 +27,15 @@
     margin-top: 20px;
     right: 0;
   }
-  .alternatives-right .label {
-    padding: 2px 4px;
-  }
   .alternatives-right .dot {
     display: inline-block;
     width: 10px;
     height: 10px;
     border-radius: 5px;
     margin-right: 5px;
+  }
+  .alternatives-right .alternative {
+    padding: 2px 4px;
   }
   .alternatives-right .hover {
     background-color: #CCC;
@@ -59,7 +59,7 @@
   <h6>Alternatives</h6>
   <% @decision.alternatives.each do |a| %>
   <div>
-    <span class="label a-<%= a.id %>">
+    <span class="alternative a-<%= a.id %>" data-id="<%= a.id %>">
       <span class="dot" style="background-color: <%= a.color %>"></span> <%= a.name %>
     </span>
   </div>
@@ -107,8 +107,56 @@ $('.member').hover(function() {
   drawGroup()
 })
 
+$('.alternative').hover(function() {
+  clearCanvas()
+  drawAlternative($(this).data('id'))
+}, function() {
+  clearCanvas()
+  drawGroup()
+})
+
 function clearCanvas() {
   $('#rate-viz svg > :not(rect)').remove()
+}
+
+function drawAlternative(aid) {
+  var cids = criteria.map(c => c.id)
+  cids.unshift('avg')
+  var color = alternatives.filter(a => a.id === aid)[0].color
+  var avgs = {}
+  cids.forEach(cid => {
+    var count = 0, sum = 0
+    for (k in scores[cid][aid]) {
+      if (scores[cid][aid][k] >= 0) {
+        count++
+        sum += scores[cid][aid][k]
+      }
+    }
+    if (count > 0) {
+      avgs[cid] = sum / count
+    }
+  })
+  d3.select('#rate-viz')
+    .selectAll('svg')
+    .data(cids)
+    .each(function(cid, i) {
+      d3.select(this)
+        .selectAll('circle')
+        .data(Object.keys(scores[cid][aid]).filter(uid => scores[cid][aid][uid] > 0))
+      .enter().append('circle')
+        .attr('cx', uid => xPos(scores[cid][aid][uid]))
+        .attr('cy', <%= height / 2 %>)
+        .attr('r', 5)
+        .attr('fill', color)
+      if (avgs[cid] >= 0) {
+        d3.select(this)
+          .append('circle')
+          .attr('cx', xPos(avgs[cid]))
+          .attr('cy', <%= height / 2 %>)
+          .attr('r', 10)
+          .attr('fill', color)
+      }
+    })
 }
 
 function drawIndividual(uid) {
