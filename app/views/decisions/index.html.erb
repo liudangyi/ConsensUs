@@ -1,9 +1,17 @@
 <style media="screen">
-.tag {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
+  .tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  .index-card {
+    /*height: 130px;*/
+  }
+  .decision-desc {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 </style>
 
 <br>
@@ -12,11 +20,13 @@
   <% @memberships.each do |membership| %>
   <% decision = membership.decision %>
   <div class="col s3">
-    <div class="card white">
+    <div class="card white index-card">
       <div class="card-content black-text">
         <a href="<%= decision_path(decision) %>">
         <span class="card-title"><%= decision.name %></span></a>
-        <p><%= decision.description %></p>
+        <div class="decision-desc">
+          <%= decision.description %>
+        </div>
         <span class="new badge grey tag" data-badge-caption="" style="position:0px"><%= decision.visibility %></span>
       </div>
       <!-- <div class="card-action">
@@ -31,7 +41,14 @@
   <div class="col s3">
     <div class="card white">
       <div class="card-content black-text">
-        <span class="card-title"><%= link_to 'New Decision', new_decision_path, data: { modal: true }  %></span>
+        <span class="card-title">
+          <div class="center">
+            <a href="<%= new_decision_path %>" data-modal="true">
+              <i class="material-icons">add_circle</i>
+            </a>
+          </div>
+
+        </span>
       </div>
 
     </div>
