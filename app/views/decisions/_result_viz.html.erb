@@ -37,7 +37,7 @@
   .alternatives-right .alternative {
     padding: 2px 4px;
   }
-  .alternatives-right .hover {
+  .alternatives-right .alternative .hover, .alternative:hover {
     background-color: #CCC;
   }
   polyline.label {
@@ -245,7 +245,7 @@ function drawSingle(cid, i) {
       var left = avgs[a.id] * <%= width / 10 %> + 20
       var right = scores[cid][a.id][myself] * <%= width / 10 %> + 20
       if (left >= 0 && right >= 0) {
-        return `${left},20 ${left},1 ${right},1 ${right},20`
+        return `${left},40 ${left},21 ${right},21 ${right},40`
       }
       return ''
     })

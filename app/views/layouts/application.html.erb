@@ -42,7 +42,9 @@
             <li class="tab" style="position: absolute; left: 50px; font-size: 18px;" ><b><%= @decision.name %></b></li>
             <li class="tab"><%= link_to 'Rate', @decision, class: current_page?(action: 'rate') && 'active' %></li>
             <li class="tab"><%= link_to 'Result', result_decision_path(@decision), class: current_page?(action: 'result') && 'active'%></li>
+            <% if @current_membership.owner? %>
             <li class="tab"><%= link_to 'Admin', admin_decision_path(@decision), class: current_page?(action: 'admin') && 'active' %></li>
+            <% end %>
         </ul>
         <% end %>
 
