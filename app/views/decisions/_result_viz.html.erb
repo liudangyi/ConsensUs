@@ -50,7 +50,7 @@
 
 <div class="member-left">
   <h6>Members</h6>
-  <% @decision.memberships.includes(:user).each do |m| %>
+  <% @decision.memberships.where(:user_id.exists => true).includes(:user).each do |m| %>
   <div><span class="member" data-id="<%= m.user.email %>"><%= m.user.name %> (<%= m.scores.select{|s| s.value >= 0}.count * 100 / (@decision.criteria.count * @decision.alternatives.count) %>%)</span></div>
   <% end %>
 </div>
