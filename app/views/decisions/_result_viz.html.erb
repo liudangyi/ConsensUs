@@ -1,6 +1,7 @@
 <%
   width = 500
   height = 80
+  @memberships = @decision.memberships.where(:user_id.exists => true).includes(:user)
 %>
 
 <style>
@@ -57,7 +58,7 @@
 
 <div class="member-left">
   <h6>Members</h6>
-  <% @decision.memberships.where(:user_id.exists => true).includes(:user).each do |m| %>
+  <% @memberships.each do |m| %>
   <div><span class="member" data-id="<%= m.user.email %>">
     <input type="checkbox" id="checkbox-<%= m.user.email %>">
     <label for="checkbox-<%= m.user.email %>" style="color: inherit; padding-left: 25px;">
@@ -97,10 +98,11 @@
 var criteria = <%= raw @decision.criteria.to_json %>
 var alternatives = <%= raw @decision.alternatives.to_json %>
 var scores = <%= raw @scores.to_json %>
-var current_user = <%= raw current_user.email.to_json %>
+var memberNames = <%= raw @memberships.map(&:user).map{|u| [u.email, u.name]}.to_h.to_json %>
+var currentUser = <%= raw current_user.email.to_json %>
 
-var selected_uid = null
-var selected_aid = null
+var selectedUid = null
+var selectedAid = null
 
 var xScale = d3.scaleLinear().domain([0, 10]).range([20, <%= width + 20 %>])
 var xPos = function(x, i) {
@@ -131,7 +133,7 @@ $('.member').hover(function() {
   $('.member input').each(function() {
     if (this != self) this.checked = false
   })
-  selected_uid = this.checked ? $(this).parent().data('id') : null
+  selectedUid = this.checked ? $(this).parent().data('id') : null
 })
 
 $('.alternative').hover(function() {
@@ -144,10 +146,10 @@ $('.alternative').hover(function() {
   $('.alternative .dot').each(function() {
     $(this).removeClass('selected')
   })
-  if ($(this).data('id') === selected_aid) {
-    selected_aid = null
+  if ($(this).data('id') === selectedAid) {
+    selectedAid = null
   } else {
-    selected_aid = $(this).data('id')
+    selectedAid = $(this).data('id')
     $(this).find('.dot').addClass('selected')
   }
   clearCanvas()
@@ -176,7 +178,7 @@ function drawSingle(aid, uid) {
 }
 
 function drawAlternative(aid) {
-  if (selected_uid) return drawSingle(aid, selected_uid)
+  if (selectedUid) return drawSingle(aid, selectedUid)
   var cids = criteria.map(c => c.id)
   cids.unshift('avg')
   var color = alternatives.filter(a => a.id === aid)[0].color
@@ -192,11 +194,20 @@ function drawAlternative(aid) {
         .attr('cy', <%= height / 2 %>)
         .attr('r', () => i ? 5 : 10)
         .attr('fill', color)
+
+      d3.select(this)
+        .selectAll('text')
+        .data(Object.keys(scores[cid][aid]).filter(uid => scores[cid][aid][uid] > 0))
+      .enter().append('text')
+        .text(uid => memberNames[uid])
+        .attr('text-anchor', 'end')
+        .attr('transform', uid => `translate(${xPos(scores[cid][aid][uid]) + 5}, <%= height / 2 + 15 %>) rotate(-30)`)
+        .attr('font-size', '12px')
     })
 }
 
 function drawIndividual(uid) {
-  if (selected_aid) return drawSingle(selected_aid, uid)
+  if (selectedAid) return drawSingle(selectedAid, uid)
   var cids = criteria.map(c => c.id)
   cids.unshift('avg')
   d3.select('#rate-viz')
@@ -215,8 +226,8 @@ function drawIndividual(uid) {
 }
 
 function drawGroup() {
-  if (selected_aid) {
-    return drawAlternative(selected_aid)
+  if (selectedAid) {
+    return drawAlternative(selectedAid)
   }
   var cids = criteria.map(c => c.id)
   cids.unshift('avg')
@@ -245,9 +256,9 @@ function drawGroupCriterium(cid) {
     }
   })
 
-  if (selected_uid) {
+  if (selectedUid) {
     alternatives.forEach((a, i) => {
-      dots.push({ id: a.id, type: 'user', r: 5, index: i, color: a.color, score: scores[cid][a.id][selected_uid] })
+      dots.push({ id: a.id, type: 'user', r: 5, index: i, color: a.color, score: scores[cid][a.id][selectedUid] })
     })
   }
 
@@ -271,7 +282,7 @@ function drawGroupCriterium(cid) {
       $('.alternative.a-' + a.id).click()
     })
 
-  if (selected_uid) {
+  if (selectedUid) {
     g.selectAll('polyline')
     .data(alternatives)
     .enter().append('polyline')
@@ -283,7 +294,7 @@ function drawGroupCriterium(cid) {
     .attr('pointer-events', 'none')
     .attr('points', a => {
       var left = avgs[a.id] * <%= width / 10 %> + 20
-      var right = scores[cid][a.id][selected_uid] * <%= width / 10 %> + 20
+      var right = scores[cid][a.id][selectedUid] * <%= width / 10 %> + 20
       if (left >= 0 && right >= 0) {
         return `${left},40 ${left},21 ${right},21 ${right},40`
       }
