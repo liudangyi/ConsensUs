@@ -150,6 +150,8 @@ $('.alternative').hover(function() {
     selected_aid = $(this).data('id')
     $(this).find('.dot').addClass('selected')
   }
+  clearCanvas()
+  drawGroup()
 })
 
 function clearCanvas() {
@@ -264,6 +266,9 @@ function drawGroupCriterium(cid) {
     })
     .on('mouseout', a => {
       d3.selectAll('.a-' + a.id + ', .a-' + cid + '-' + a.id).classed('hover', false)
+    })
+    .on('click', a => {
+      $('.alternative.a-' + a.id).click()
     })
 
   if (selected_uid) {
