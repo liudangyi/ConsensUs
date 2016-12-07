@@ -29,7 +29,10 @@
   </div>
 </div>
 
-  <div class="modal-footer">
-    <%= f.submit class: 'modal-action modal-close waves-effect waves-green btn-flat' %>
-  </div>
+<div class="modal-footer">
+  <%= link_to 'Destroy', @membership, method: :delete, data: { confirm: 'Are you sure?' },
+        class: 'modal-action modal-close waves-effect waves-green btn-flat',
+        style: 'float: left' unless @membership.new_record? %>
+  <%= f.submit class: 'modal-action modal-close waves-effect waves-green btn-flat' %>
+</div>
 <% end %>

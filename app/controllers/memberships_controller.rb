@@ -34,7 +34,7 @@ class MembershipsController < ApplicationController
 
   # DELETE /memberships/1
   def destroy
-    if @membership.user == current_user
+    if @membership.owner? and @membership.user == current_user
       redirect_to :back, notice: 'You cannot delete yourself!'
     else
       @membership.destroy
