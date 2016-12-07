@@ -203,6 +203,7 @@ function drawAlternative(aid) {
         .attr('text-anchor', 'end')
         .attr('transform', uid => `translate(${xPos(scores[cid][aid][uid]) + 5}, <%= height / 2 + 15 %>) rotate(-30)`)
         .attr('font-size', '12px')
+        .attr('fill', '#666')
     })
 }
 
