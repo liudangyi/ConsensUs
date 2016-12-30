@@ -24,62 +24,112 @@
     left: 0;
   }
 
+
+  .left{
+    width: 50%;
+    height:100%;
+    /*background: black;*/
+    background-image: url(<%= asset_path( 'left_2.jpg' ) %>);
+    background-size: 100% 100%;
+    left: 0;
+    position: absolute;
+  }
+
+  .right{
+    width: 50%;
+    height:100%;
+    background: #F9F9F9;
+    right: 0;
+    position: absolute;
+  }
+
+  .ic{
+    width: 250px;
+    margin: 0 auto;
+    top: 40%;
+    margin-top: -162px;
+    position: absolute;
+    left: 50%;
+    margin-left: -125px;
+  }
+
+  .ic p {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 26px;
+    color: #757575;
+    margin-bottom: 30px;
+    font-family: Roboto;
+    margin-bottom: 0%;
+  }
+
+  h2{
+    font-size: 30px;
+    font-weight: 100;
+    color: #03A9F4;
+    font-family: Roboto;
+  }
+    .row{
+      margin-bottom: 0%;
+    }
+
 </style>
 
-<div class="section"></div>
-<main>
-  <center>
-    <h1 class="indigo-text">ConsensUs</h1>
-    <div class="section"></div>
 
-    <h5 class="indigo-text">Please, login into your account</h5>
-    <div class="section"></div>
+<div class="whole">
+  <div class="left">
 
-    <div class="container">
-      <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+  </div>
 
-        <%= form_for(resource, as: resource_name, url: session_path(resource_name), class: "col s12") do |f| %>
-          <div class='row'>
-            <div class='col s12'>
-            </div>
-          </div>
+  <div class="right">
+    <div class="ic">
+      <h2>ConsensUs Login</h2>
+      <p>
+        Welcome to use ConsensUs, a group decision making tool brought you by UC San Diego.
+      </p>
 
-          <div class='row'>
-            <div class='input-field col s12'>
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), class: "col s12") do |f| %>
+
+
+          <div class='row' style="margin: 0px">
+            <div class='input-field col s12' style="padding: 0%">
               <%= f.email_field :email, autofocus: true, class: 'validate' %>
-              <%= f.label :email, 'Enter your email' %>
+              <%= f.label :email, 'Email' %>
             </div>
           </div>
 
-          <div class='row'>
-            <div class='input-field col s12'>
+          <div class='row' style="margin: 0px">
+            <div class='input-field col s12' style="padding: 0%">
               <%= f.password_field :password, autocomplete: 'off', class: 'validate' %>
-              <%= f.label :password, 'Enter your password' %>
+              <%= f.label :password, 'Password' %>
             </div>
             <label style='float: right;'>
-							<a class='pink-text' href='<%= new_password_path(resource_name) %>'><b>Forgot Password?</b></a>
-						</label>
+              <a class='pink-text' href='<%= new_password_path(resource_name) %>' style="font-family: Roboto"><b>Forgot Password?</b></a>
+            </label>
           </div>
 
-            <% if devise_mapping.rememberable? -%>
-              <div class="field">
-                <%= f.check_box :remember_me %>
-                <%= f.label :remember_me %>
-              </div>
-            <% end -%>
+          <!--<% if devise_mapping.rememberable? -%>-->
+              <!--<div class="field">-->
+                <!--<%= f.check_box :remember_me %>-->
+                <!--<%= f.label :remember_me %>-->
+              <!--</div>-->
+          <!--<% end -%>-->
 
           <br />
-          <center>
-            <div class='row'>
-              <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Login</button>
-            </div>
-          </center>
-        <% end %>
-      </div>
-    </div>
-    <a href='<%= new_registration_path(resource_name) %>'>Create account</a>
-  </center>
 
-  <div class="section"></div>
-  <div class="section"></div>
-</main>
+            <div class='row'>
+              <button type='submit' name='btn_login' class='col s4 btn btn-small waves-effect light-blue' style="float: right">Login</button>
+
+              <button onclick="location.href='<%= new_registration_path(resource_name) %>';"  type="button" name='btn_login' class='col s4 btn btn-small waves-effect white' style="float: right; margin-right: 5px; color: #03A9F4">Sign Up</button>
+            </div>
+
+      <% end %>
+
+    </div>
+  </div>
+
+</div>
+
+
+
+
