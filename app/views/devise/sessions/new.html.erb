@@ -63,6 +63,223 @@
     margin-bottom: 0%;
   }
 
+  .section1 p {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 26px;
+    color: #757575;
+    margin-bottom: 30px;
+    font-family: Roboto;
+    margin-bottom: 0%;
+  }
+
+  .section1{
+    height: 60vh;
+    background-color: white;
+    width: 100vw;
+    /*border-style: solid;*/
+    border-bottom: solid;
+    border-top: solid;
+    border-color: #d1d1d1;
+
+  }
+
+  .section1_left{
+    width: 50%;
+    height:inherit;
+    background-size: 100% 100%;
+    left: 0;
+    position: absolute;
+  }
+
+  .section1_right{
+    width: 50%;
+    height:inherit;
+    background-size: 100% 100%;
+    right: 0;
+    position: absolute;
+
+  }
+
+  .section1_left_content{
+    width: 60%;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+    /*margin-top: -162px;*/
+    position: absolute;
+    left: 50%;
+    margin-left: -125px;
+
+  }
+
+  .section1_right_content{
+    width: 60%;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+    /*margin-top: -162px;*/
+    position: absolute;
+    left: 50%;
+    margin-left: -250px;
+  }
+
+
+  .section2 p {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 26px;
+    color: #757575;
+    margin-bottom: 30px;
+    font-family: Roboto;
+    margin-bottom: 0%;
+  }
+
+  .section2{
+    height: 60vh;
+    background-color: white;
+    width: 100vw;
+    /*border-style: solid;*/
+    border-bottom: solid;
+    border-top: solid;
+    border-color: #d1d1d1;
+
+  }
+
+  .section2_left{
+    width: 50%;
+    height:inherit;
+    background-size: 100% 100%;
+    left: 0;
+    position: absolute;
+  }
+
+  .section2_right{
+    width: 50%;
+    height:inherit;
+    background-size: 100% 100%;
+    right: 0;
+    position: absolute;
+
+  }
+
+  .section2_left_content{
+    width: 60%;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+    /*margin-top: -162px;*/
+    position: absolute;
+    left: 50%;
+    margin-left: -125px;
+
+  }
+
+  .section2_right_content{
+    width: 60%;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+    /*margin-top: -162px;*/
+    position: absolute;
+    left: 50%;
+    margin-left: -250px;
+  }
+
+
+
+
+  #video-container {
+    width: 100%;
+    height:inherit;
+    /*background-size: 100% 100%;*/
+    left: 0;
+    position: absolute;
+    overflow: hidden;
+
+    /*top:0%;*/
+    /*left:0%;*/
+    /*height:60px;*/
+    /*width:100%;*/
+    /*overflow: hidden;*/
+  }
+  video {
+    /*position:absolute;*/
+    z-index:-20;
+  }
+  video.fillWidth {
+    width: 100%;
+  }
+
+
+
+  .section4 p {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 26px;
+    color: #757575;
+    margin-bottom: 30px;
+    font-family: Roboto;
+    margin-bottom: 0%;
+  }
+
+  .section4{
+    height: 60vh;
+    background-color: white;
+    width: 100vw;
+    /*border-style: solid;*/
+    border-bottom: solid;
+    border-top: solid;
+    border-color: #d1d1d1;
+
+  }
+
+  .section4_left{
+    width: 50%;
+    height:inherit;
+    background-size: 100% 100%;
+    left: 0;
+    position: absolute;
+  }
+
+  .section4_right{
+    width: 50%;
+    height:inherit;
+    background-size: 100% 100%;
+    right: 0;
+    position: absolute;
+
+  }
+
+  .section4_left_content{
+    width: 60%;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+    /*margin-top: -162px;*/
+    position: absolute;
+    left: 50%;
+    margin-left: -125px;
+
+  }
+
+  .section4_right_content{
+    width: 60%;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+    /*margin-top: -162px;*/
+    position: absolute;
+    left: 50%;
+    margin-left: -250px;
+  }
+
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
   h2{
     font-size: 30px;
     font-weight: 100;
@@ -76,46 +293,48 @@
 </style>
 
 
-<div class="whole">
-  <div class="left">
+<div class="whole row" style="margin: 0px">
+  <div style="height: 100vh; width: 100%">
 
-  </div>
+    <div class="left">
 
-  <div class="right">
-    <div class="ic">
-      <h2>ConsensUs Login</h2>
-      <p>
-        Welcome to use ConsensUs, a group decision making tool brought you by UC San Diego.
-      </p>
+    </div>
 
-      <%= form_for(resource, as: resource_name, url: session_path(resource_name), class: "col s12") do |f| %>
+    <div class="right">
+      <div class="ic">
+        <h2>ConsensUs Login</h2>
+        <p>
+          Welcome to use ConsensUs, a group decision making tool brought you by UC San Diego.
+        </p>
+
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name), class: "col s12") do |f| %>
 
 
-          <div class='row' style="margin: 0px">
-            <div class='input-field col s12' style="padding: 0%">
-              <%= f.email_field :email, autofocus: true, class: 'validate' %>
-              <%= f.label :email, 'Email' %>
+            <div class='row' style="margin: 0px">
+              <div class='input-field col s12' style="padding: 0%">
+                <%= f.email_field :email, autofocus: true, class: 'validate' %>
+                <%= f.label :email, 'Email' %>
+              </div>
             </div>
-          </div>
 
-          <div class='row' style="margin: 0px">
-            <div class='input-field col s12' style="padding: 0%">
-              <%= f.password_field :password, autocomplete: 'off', class: 'validate' %>
-              <%= f.label :password, 'Password' %>
+            <div class='row' style="margin: 0px">
+              <div class='input-field col s12' style="padding: 0%">
+                <%= f.password_field :password, autocomplete: 'off', class: 'validate' %>
+                <%= f.label :password, 'Password' %>
+              </div>
+              <label style='float: right;'>
+                <a class='pink-text' href='<%= new_password_path(resource_name) %>' style="font-family: Roboto"><b>Forgot Password?</b></a>
+              </label>
             </div>
-            <label style='float: right;'>
-              <a class='pink-text' href='<%= new_password_path(resource_name) %>' style="font-family: Roboto"><b>Forgot Password?</b></a>
-            </label>
-          </div>
 
-          <!--<% if devise_mapping.rememberable? -%>-->
-              <!--<div class="field">-->
+            <!--<% if devise_mapping.rememberable? -%>-->
+                <!--<div class="field">-->
                 <!--<%= f.check_box :remember_me %>-->
                 <!--<%= f.label :remember_me %>-->
-              <!--</div>-->
-          <!--<% end -%>-->
+                <!--</div>-->
+                <!--<% end -%>-->
 
-          <br />
+            <br />
 
             <div class='row'>
               <button type='submit' name='btn_login' class='col s4 btn btn-small waves-effect light-blue' style="float: right">Login</button>
@@ -123,10 +342,88 @@
               <button onclick="location.href='<%= new_registration_path(resource_name) %>';"  type="button" name='btn_login' class='col s4 btn btn-small waves-effect white' style="float: right; margin-right: 5px; color: #03A9F4">Sign Up</button>
             </div>
 
-      <% end %>
+        <% end %>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section1">
+    <div class="section1_left">
+      <div class="section1_left_content">
+        <h2>
+          Lorem ipsum
+        </h2>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at ante. Mauris eleifend, quam a vulputate dictum, massa quam dapibus leo, eget vulputate orci purus ut lorem. In fringilla mi in ligula. Pellentesque aliquam quam vel dolor. Nunc adipiscing. Sed quam odio, tempus ac, aliquam molestie, varius ac, tellus. Vestibulum ut nulla aliquam risus rutrum interdum. Pellentesque lorem. Curabitur sit amet erat quis risus feugiat viverra. Pellentesque augue justo, sagittis et, lacinia at, venenatis non, arcu. Nunc nec libero. In cursus dictum risus. Etiam tristique nisl a nulla. Ut a orci. Curabitur dolor nunc, egestas at, accumsan at, malesuada nec, magna.
+        </p>
+
+      </div>
+    </div>
+    <div class="section1_right">
+      <div class="section1_right_content">
+        <img src="<%= asset_path( 'full_placeholder.png' ) %>" >
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section2">
+
+    <div class="section2_left">
+      <div class="section2_left_content">
+
+        <img src="<%= asset_path( 'full_placeholder.png' ) %>" >
+      </div>
+    </div>
+
+    <div class="section2_right">
+      <div class="section2_right_content">
+        <h2>
+          Lorem ipsum
+        </h2>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at ante. Mauris eleifend, quam a vulputate dictum, massa quam dapibus leo, eget vulputate orci purus ut lorem. In fringilla mi in ligula. Pellentesque aliquam quam vel dolor. Nunc adipiscing. Sed quam odio, tempus ac, aliquam molestie, varius ac, tellus. Vestibulum ut nulla aliquam risus rutrum interdum. Pellentesque lorem. Curabitur sit amet erat quis risus feugiat viverra. Pellentesque augue justo, sagittis et, lacinia at, venenatis non, arcu. Nunc nec libero. In cursus dictum risus. Etiam tristique nisl a nulla. Ut a orci. Curabitur dolor nunc, egestas at, accumsan at, malesuada nec, magna.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="height: 50vh">
+
+    <div id="video-container">
+      <video autoplay loop class="fillWidth">
+        <source src="<%= asset_path( 'header-video.mp4' ) %>" type="video/mp4"/>
+      </video>
 
     </div>
   </div>
+
+  <div class="section4">
+    <div class="section4_left">
+      <div class="section4_left_content">
+        <h2>
+          Lorem ipsum
+        </h2>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at ante. Mauris eleifend, quam a vulputate dictum, massa quam dapibus leo, eget vulputate orci purus ut lorem. In fringilla mi in ligula. Pellentesque aliquam quam vel dolor. Nunc adipiscing. Sed quam odio, tempus ac, aliquam molestie, varius ac, tellus. Vestibulum ut nulla aliquam risus rutrum interdum. Pellentesque lorem. Curabitur sit amet erat quis risus feugiat viverra. Pellentesque augue justo, sagittis et, lacinia at, venenatis non, arcu. Nunc nec libero. In cursus dictum risus. Etiam tristique nisl a nulla. Ut a orci. Curabitur dolor nunc, egestas at, accumsan at, malesuada nec, magna.
+        </p>
+
+      </div>
+    </div>
+    <div class="section4_right">
+      <div class="section4_right_content">
+        <img src="<%= asset_path( 'full_placeholder.png' ) %>" >
+      </div>
+    </div>
+
+  </div>
+
+  <footer style="text-align: center; width: 100vw;">
+    Design Lab | University of California, San Diego | 2017
+  </footer>
 
 </div>
 
