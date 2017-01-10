@@ -3,7 +3,7 @@
   <h4><%= title %></h4>
   <% if decision.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(decision.errors.count, "error") %> prohibited this decision from being saved:</h2>
+      <p><%= pluralize(decision.errors.count, "error") %> prohibited this decision from being saved:</p>
 
       <ul>
       <% decision.errors.full_messages.each do |message| %>
