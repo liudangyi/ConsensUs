@@ -3,7 +3,7 @@
   <h4><%= title %></h4>
   <% if alternative.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(alternative.errors.count, "error") %> prohibited this alternative from being saved:</h2>
+      <p><%= pluralize(alternative.errors.count, "error") %> prohibited this alternative from being saved:</p>
 
       <ul>
       <% alternative.errors.full_messages.each do |message| %>

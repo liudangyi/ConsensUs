@@ -2,8 +2,8 @@
 <div class="modal-content">
   <h4><%= title %></h4>
   <% if membership.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(membership.errors.count, "error") %> prohibited this membership from being saved:</h2>
+    <div id="error_explanation" style="color: #00C853">
+      <p><%= pluralize(membership.errors.count, "error") %> prohibited this membership from being saved:</p>
       <ul>
       <% membership.errors.full_messages.each do |message| %>
         <li><%= message %></li>

@@ -24,62 +24,193 @@
     left: 0;
   }
 
+
+  .left{
+    width: 50%;
+    height:100%;
+    background: #2C3034;
+    left: 0;
+    position: absolute;
+  }
+
+  .right{
+    width: 50%;
+    height:100%;
+    /*background: black;*/
+    background-image: url(<%= asset_path( 'register.jpg' ) %>);
+    background-size: 100% 100%;
+    right: 0;
+    position: absolute;
+  }
+
+  .ic{
+    width: 300px;
+    margin: 0 auto;
+    top: 40%;
+    margin-top: -162px;
+    position: absolute;
+    left: 50%;
+    margin-left: -125px;
+  }
+
+  .ic p {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 26px;
+    color: #757575;
+    margin-bottom: 30px;
+    font-family: Roboto;
+    margin-bottom: 0%;
+  }
+
+  .ic ul {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 26px;
+    color: red;
+    margin-bottom: 30px;
+    font-family: Roboto;
+    margin-bottom: 0%;
+  }
+
+  .ic h2 {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 26px;
+    color: red;
+    margin-bottom: 30px;
+    font-family: Roboto;
+    margin-bottom: 0%;
+  }
+
+  #consensusHead{
+    font-size: 30px;
+    font-weight: 100;
+    color: #03A9F4;
+    font-family: Roboto;
+  }
+  .row{
+    margin-bottom: 0%;
+  }
+
+
 </style>
 
 <div class="section">
   <main>
-    <center>
-      <h1 class="indigo-text">ConsensUs</h1>
-      <div class="section"></div>
 
-      <h5 class="indigo-text">Sign Up</h5>
-      <div class="section"></div>
+
 
       <div class="container">
-        <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
-          <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-            <%= devise_error_messages! %>
 
-            <div class='row'>
-              <div class="input-field col s12">
+        <div class="left">
+
+          <div class="ic">
+            <h2 id="consensusHead">ConsensUs Register</h2>
+
+            <br>
+            <br>
+
+            <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+                <%= devise_error_messages! %>
+
+                <div class='row'  style="margin: 0px">
+                <div class="input-field col s12" style="padding: 0%">
                 <%= f.text_field :name, autofocus: true, class: 'validate' %>
                 <%= f.label :name %>
-              </div>
-            </div>
+                </div>
+                </div>
 
-            <div class='row'>
-              <div class="input-field col s12">
+                <div class='row' style="margin: 0px">
+                <div class="input-field col s12" style="padding: 0%">
                 <%= f.email_field :email, class: 'validate' %>
                 <%= f.label :email %>
-              </div>
-            </div>
+                </div>
+                </div>
 
-            <div class="row">
-              <div class='input-field col s12'>
+                <div class="row" style="margin: 0px">
+                <div class='input-field col s12' style="padding: 0%; color: #757575">
                 <%= f.password_field :password, autocomplete: "off", class: 'validate' %>
                 <%= f.label :password, 'Password' %>
                 <% if @minimum_password_length %>
-                <span class="input-field">(<%= @minimum_password_length %> characters minimum)</span>
-                <% end %>
-              </div>
-            </div>
+                    <span class="input-field">(<%= @minimum_password_length %> characters minimum)</span>
+                    <% end %>
+                </div>
+                </div>
 
-            <div class="row">
-              <div class='input-field col s12'>
+                <div class="row" style="margin: 0px">
+                <div class='input-field col s12' style="padding: 0%">
                 <%= f.password_field :password_confirmation, autocomplete: "off", class: 'validate' %>
                 <%= f.label :password_confirmation %>
-              </div>
-            </div>
+                </div>
+                </div>
 
-            <center>
-              <div class="row">
-                <button type='submit' name='commit' class='col s12 btn btn-large waves-effect indigo'>Sign up</button>
-              </div>
-            </center>
-          <% end %>
+                <center>
+                <div class="row" style="margin: 0px">
+
+                <!--<button type='submit' name='commit' class='col s12 btn btn-large waves-effect indigo'>Sign up</button>-->
+                  <button type='submit' name='btn_login' class='col s4 btn btn-small waves-effect light-blue' style="float: right">Sign up</button>
+
+                  <button onclick="location.href='<%= new_session_path(resource_name) %>';"  type="button" name='btn_login' class='col s4 btn btn-small waves-effect white' style="float: right; margin-right: 5px; color: #03A9F4">Log in</button>
+                </div>
+                </center>
+                <% end %>
+          </div>
         </div>
+
+        <div class="right">
+        </div>
+
+
+
+
+
+
+
+        <!--<div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">-->
+          <!--<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>-->
+            <!--<%= devise_error_messages! %>-->
+
+            <!--<div class='row'>-->
+              <!--<div class="input-field col s12">-->
+                <!--<%= f.text_field :name, autofocus: true, class: 'validate' %>-->
+                <!--<%= f.label :name %>-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class='row'>-->
+              <!--<div class="input-field col s12">-->
+                <!--<%= f.email_field :email, class: 'validate' %>-->
+                <!--<%= f.label :email %>-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="row">-->
+              <!--<div class='input-field col s12'>-->
+                <!--<%= f.password_field :password, autocomplete: "off", class: 'validate' %>-->
+                <!--<%= f.label :password, 'Password' %>-->
+                <!--<% if @minimum_password_length %>-->
+                <!--<span class="input-field">(<%= @minimum_password_length %> characters minimum)</span>-->
+                <!--<% end %>-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="row">-->
+              <!--<div class='input-field col s12'>-->
+                <!--<%= f.password_field :password_confirmation, autocomplete: "off", class: 'validate' %>-->
+                <!--<%= f.label :password_confirmation %>-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<center>-->
+              <!--<div class="row">-->
+                <!--<button type='submit' name='commit' class='col s12 btn btn-large waves-effect indigo'>Sign up</button>-->
+              <!--</div>-->
+            <!--</center>-->
+          <!--<% end %>-->
+        <!--</div>-->
       </div>
       <%= render "devise/shared/links" %>
-    </center>
+
   </main>
 </div>

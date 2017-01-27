@@ -3,7 +3,7 @@
   <h4><%= title %></h4>
   <% if criterium.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(criterium.errors.count, "error") %> prohibited this criterium from being saved:</h2>
+      <p><%= pluralize(criterium.errors.count, "error") %> prohibited this criterium from being saved:</p>
 
       <ul>
       <% criterium.errors.full_messages.each do |message| %>
