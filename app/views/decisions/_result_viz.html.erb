@@ -240,20 +240,20 @@ function drawGroup() {
 
 function drawGroupCriterium(cid) {
   var g = d3.select(this)
-  var avgs = {}
+  var avgs = {}, stds = {}
   var dots = []
 
   alternatives.forEach(a => {
-    var count = 0, sum = 0
+    var ss = []
     for (k in scores[cid][a.id]) {
       if (scores[cid][a.id][k] >= 0) {
-        count++
-        sum += scores[cid][a.id][k]
+        ss.push(scores[cid][a.id][k])
       }
     }
-    if (count > 0) {
-      avgs[a.id] = sum / count
-      dots.push({ id: a.id, type: 'average', r: 10, color: a.color, score: sum / count })
+    if (ss.length > 0) {
+      avgs[a.id] = d3.mean(ss)
+      stds[a.id] = d3.deviation(ss)
+      dots.push({ id: a.id, type: 'average', r: 10, color: a.color, score: avgs[a.id] })
     }
   })
 
@@ -283,25 +283,30 @@ function drawGroupCriterium(cid) {
       $('.alternative.a-' + a.id).click()
     })
 
-  if (selectedUid) {
-    g.selectAll('polyline')
-    .data(alternatives)
-    .enter().append('polyline')
-    .attr('class', a => 'label a-' + cid + '-' + a.id)
-    .attr('fill', 'none')
-    .attr('stroke', '#F00')
-    .attr('stroke-width', 2)
-    .attr('stroke-linejoin', 'round')
-    .attr('pointer-events', 'none')
-    .attr('points', a => {
+  g.selectAll('polyline')
+  .data(alternatives)
+  .enter().append('polyline')
+  .attr('class', a => 'label a-' + cid + '-' + a.id)
+  .attr('fill', 'none')
+  .attr('stroke', '#F00')
+  .attr('stroke-width', 2)
+  .attr('stroke-linejoin', 'round')
+  .attr('pointer-events', 'none')
+  .attr('points', a => {
+    if (selectedUid) {
       var left = avgs[a.id] * <%= width / 10 %> + 20
       var right = scores[cid][a.id][selectedUid] * <%= width / 10 %> + 20
       if (left >= 0 && right >= 0) {
         return `${left},40 ${left},21 ${right},21 ${right},40`
       }
       return ''
-    })
-  }
+    } else if (stds[a.id] > 0) {
+      var mid = avgs[a.id] * <%= width / 10 %> + 20
+      var left = (avgs[a.id] - stds[a.id]) * <%= width / 10 %> + 20
+      var right = (avgs[a.id] + stds[a.id]) * <%= width / 10 %> + 20
+      return `${left},21 ${mid},21 ${mid},40 ${mid},21 ${right},21`
+    }
+  })
 }
 
 function calcAvgs() {
