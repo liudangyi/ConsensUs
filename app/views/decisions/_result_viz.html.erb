@@ -78,7 +78,7 @@
     </span>
   </div>
   <% end %>
-  <div class="legends" style="margin-top: 10px; font-size: 12px;">
+  <div class="legends" style="margin-top: 30px; font-size: 12px;">
     <div style="margin-bottom: 10px;">
       <svg width="20" height="20">
         <circle cx="10" cy="10" r="9.5" style="fill: rgb(211, 211, 211); stroke: rgb(0, 0, 0); stroke-width: 1px;"></circle>
@@ -299,7 +299,7 @@ function drawGroupCriterium(cid) {
   })
 
   alternatives.forEach((a, i) => {
-    dots.push({ id: a.id, type: 'user', r: 5, index: i, color: a.color, score: scores[cid][a.id][selectedUid || maxKey(scores[cid][a.id])] })
+    dots.push({ id: a.id, type: 'user', r: 5, index: i, color: a.color, score: scores[cid][a.id][selectedUid || maxKey(scores[cid][a.id], u => Math.abs(scores[cid][a.id][u] - avgs[a.id]))] })
   })
 
   g.selectAll('circle')
@@ -362,8 +362,17 @@ function drawGroupCriterium(cid) {
       return `${left},21 ${mid},21 ${mid},40 ${mid},21 ${right},21`
     })
     .lower()
-    var aid = maxKey(scores[cid], a => Math.abs(scores[cid][a][maxKey(scores[cid][a], u => Math.abs(scores[cid][a][u] - avgs[a]))]) - avgs[a])
-    var uid = maxKey(scores[cid][aid], u => Math.abs(scores[cid][aid][u] - avgs[aid]))
+
+    var m = 0, aid, uid
+    for (var a in scores[cid]) {
+      for (var u in scores[cid][a]) {
+        if (Math.abs(scores[cid][a][u] - avgs[a]) > m) {
+          m = Math.abs(scores[cid][a][u] - avgs[a])
+          aid = a
+          uid = u
+        }
+      }
+    }
     g.append('polyline')
     .attr('class', 'a-' + cid + '-' + aid)
     .attr('fill', 'none')
