@@ -183,6 +183,18 @@ $('.alternative').hover(function() {
   drawGroup()
 })
 
+$(document).keyup(function(e) {
+  if (e.keyCode == 27) { // escape key maps to keycode `27`
+    $('.alternative .dot').each(function() {
+      $(this).removeClass('selected')
+    })
+    selectedAid = null
+  }
+  clearCanvas()
+  drawGroup()
+})
+
+
 function clearCanvas() {
   $('#rate-viz svg > :not(rect)').remove()
 }
@@ -298,9 +310,11 @@ function drawGroupCriterium(cid) {
     }
   })
 
-  alternatives.forEach((a, i) => {
-    dots.push({ id: a.id, type: 'user', r: 5, index: i, color: a.color, score: scores[cid][a.id][selectedUid || maxKey(scores[cid][a.id], u => Math.abs(scores[cid][a.id][u] - avgs[a.id]))] })
-  })
+  if (selectedUid) {
+    alternatives.forEach((a, i) => {
+      dots.push({ id: a.id, type: 'user', r: 5, index: i, color: a.color, score: scores[cid][a.id][selectedUid] })
+    })
+  }
 
   g.selectAll('circle')
     .data(dots)
@@ -333,62 +347,29 @@ function drawGroupCriterium(cid) {
     .attr('stroke-linejoin', 'round')
     .attr('pointer-events', 'none')
     .attr('points', a => {
-      if (selectedUid) {
-        var left = avgs[a.id] * <%= width / 10 %> + 20
-        var right = scores[cid][a.id][selectedUid] * <%= width / 10 %> + 20
-        if (left >= 0 && right >= 0) {
-          return `${left},40 ${left},21 ${right},21 ${right},40`
-        }
-        return ''
-      } else if (stds[a.id] > 0) {
-        var mid = avgs[a.id] * <%= width / 10 %> + 20
-        var left = (avgs[a.id] - stds[a.id]) * <%= width / 10 %> + 20
-        var right = (avgs[a.id] + stds[a.id]) * <%= width / 10 %> + 20
-        return `${left},21 ${mid},21 ${mid},40 ${mid},21 ${right},21`
-      }
-    })
-  } else {
-    var aid = maxKey(stds)
-    g.append('polyline')
-    .attr('fill', 'none')
-    .attr('stroke', '#F00')
-    .attr('stroke-width', 2)
-    .attr('stroke-linejoin', 'round')
-    .attr('pointer-events', 'none')
-    .attr('points', a => {
-      var mid = avgs[aid] * <%= width / 10 %> + 20
-      var left = (avgs[aid] - stds[aid]) * <%= width / 10 %> + 20
-      var right = (avgs[aid] + stds[aid]) * <%= width / 10 %> + 20
-      return `${left},21 ${mid},21 ${mid},40 ${mid},21 ${right},21`
-    })
-    .lower()
-
-    var m = 0, aid, uid
-    for (var a in scores[cid]) {
-      for (var u in scores[cid][a]) {
-        if (Math.abs(scores[cid][a][u] - avgs[a]) > m) {
-          m = Math.abs(scores[cid][a][u] - avgs[a])
-          aid = a
-          uid = u
-        }
-      }
-    }
-    g.append('polyline')
-    .attr('class', 'a-' + cid + '-' + aid)
-    .attr('fill', 'none')
-    .attr('stroke', '#F00')
-    .attr('stroke-width', 2)
-    .attr('stroke-linejoin', 'round')
-    .attr('pointer-events', 'none')
-    .attr('points', a => {
-      var left = avgs[aid] * <%= width / 10 %> + 20
-      var right = scores[cid][aid][uid] * <%= width / 10 %> + 20
+      var left = avgs[a.id] * <%= width / 10 %> + 20
+      var right = scores[cid][a.id][selectedUid] * <%= width / 10 %> + 20
       if (left >= 0 && right >= 0) {
         return `${left},40 ${left},59 ${right},59 ${right},40`
       }
       return ''
     })
   }
+
+  g.append('polyline')
+  .attr('fill', 'none')
+  .attr('stroke', '#F00')
+  .attr('stroke-width', 2)
+  .attr('stroke-linejoin', 'round')
+  .attr('pointer-events', 'none')
+  .attr('points', () => {
+    var aid = maxKey(stds)
+    var mid = avgs[aid] * <%= width / 10 %> + 20
+    var left = (avgs[aid] - stds[aid]) * <%= width / 10 %> + 20
+    var right = (avgs[aid] + stds[aid]) * <%= width / 10 %> + 20
+    return `${left},21 ${mid},21 ${mid},40 ${mid},21 ${right},21`
+  })
+  .lower()
 }
 
 function calcAvgs() {
