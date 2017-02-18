@@ -26,7 +26,7 @@
     position: absolute;
     width: 15%;
     margin-top: 20px;
-    right: 0;
+    right: 20px;
   }
   .alternatives-right .dot {
     display: inline-block;
@@ -78,6 +78,33 @@
     </span>
   </div>
   <% end %>
+  <div class="legends" style="margin-top: 10px; font-size: 12px;">
+    <div style="margin-bottom: 10px;">
+      <svg width="20" height="20">
+        <circle cx="10" cy="10" r="9.5" style="fill: rgb(211, 211, 211); stroke: rgb(0, 0, 0); stroke-width: 1px;"></circle>
+      </svg> Committee
+    </div>
+    <div style="margin-bottom: 10px;">
+      <svg width="20" height="20">
+        <circle cx="10" cy="10" r="4" style="fill: rgb(211, 211, 211); stroke: rgb(0, 0, 0); stroke-width: 1px;"></circle>
+      </svg> You
+    </div>
+    <div style="margin-bottom: 10px;">
+      <svg width="70" height="25">
+        <circle cx="10" cy="10" r="9.5" style="fill: rgb(211, 211, 211); stroke: rgb(0, 0, 0); stroke-width: 1px;"></circle>
+        <circle cx="60" cy="10" r="4" style="fill: rgb(211, 211, 211); stroke: rgb(0, 0, 0); stroke-width: 1px;"></circle>
+        <polyline fill="none" stroke="#F00" stroke-width="2" stroke-linejoin="round" points="10,10 10,24 60,24 60,10"></polyline>
+      </svg><br>
+      Conflict between committee &amp; someone
+    </div>
+    <div style="margin-bottom: 10px;">
+      <svg width="60" height="30">
+        <circle cx="30" cy="18" r="9.5" style="fill: rgb(211, 211, 211); stroke: rgb(0, 0, 0); stroke-width: 1px;"></circle>
+        <polyline fill="none" stroke="#F00" stroke-width="2" stroke-linejoin="round" points="1,1 30,1 30,18 30,1 59,1"></polyline>
+      </svg><br>
+      Biggest point of disagreement within the commitee
+    </div>
+  </div>
 </div>
 
 <table id="rate-viz" style="margin-top: 20px;">
@@ -335,8 +362,8 @@ function drawGroupCriterium(cid) {
       return `${left},21 ${mid},21 ${mid},40 ${mid},21 ${right},21`
     })
     .lower()
-    var aid = maxKey(scores[cid], a => scores[cid][a][maxKey(scores[cid][a])])
-    var uid = maxKey(scores[cid][aid])
+    var aid = maxKey(scores[cid], a => Math.abs(scores[cid][a][maxKey(scores[cid][a], u => Math.abs(scores[cid][a][u] - avgs[a]))]) - avgs[a])
+    var uid = maxKey(scores[cid][aid], u => Math.abs(scores[cid][aid][u] - avgs[aid]))
     g.append('polyline')
     .attr('class', 'a-' + cid + '-' + aid)
     .attr('fill', 'none')
