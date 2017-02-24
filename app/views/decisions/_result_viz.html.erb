@@ -203,7 +203,7 @@ function drawSingle(aid, uid) {
         .append('circle')
         .attr('cx', xPos(scores[cid][aid][uid], 0))
         .attr('cy', <%= height / 2 %>)
-        .attr('r', () => i ? 5 : 10)
+        .attr('r', 5)
         .attr('fill', color)
     })
 }
@@ -252,7 +252,7 @@ function drawIndividual(uid) {
       .enter().append('circle')
         .attr('cx', (a, i) => xPos(scores[cid][a.id][uid], i))
         .attr('cy', <%= height / 2 %>)
-        .attr('r', () => i ? 5 : 10)
+        .attr('r', 5)
         .attr('fill', a => a.color)
     })
 }
